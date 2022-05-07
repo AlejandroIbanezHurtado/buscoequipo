@@ -1,19 +1,151 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="en">
+  <head>
+    <title>Sportz &mdash; Colorlib Sports Team Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
+    <link rel="stylesheet" href="{{ asset('fonts/icomoon/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/aos.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}">
+    {% block styles %}
+    {% endblock %}
+    
+  </head>
+  <body>
+  
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-logo">
+          <a href="#"><img src="images/logo.png" alt="Image"></a>
+        </div>
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <header class="site-navbar absolute transparent" role="banner">
+      <nav class="site-navigation position-relative text-right bg-black text-md-right" role="navigation">
+        <div class="container position-relative">
+          <div class="site-logo">
+            <a href="/index"><img src="images/logo.png" alt=""></a>
+          </div>
+
+          <div class="d-inline-block d-md-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
+
+          <ul class="site-menu js-clone-nav d-none d-md-block">
+          <li><a href="/index">Inicio</a></li>
+            <li class="has-children">
+              <a href="/equipos">Equipos</a>
+              <ul class="dropdown arrow-top">
+                <li class="has-children">
+                  <a href="/crear/quipo">Crea un equipo</a>
+                </li>
+                <li class="has-children">
+                  <a href="/unir/equipo">Unirse a un equipo</a>
+                </li>
+              </ul>
+            </li>
+            <li class="has-children">
+              <a href="/partidos">Partidos</a>
+              <ul class="dropdown arrow-top">
+                <li class="has-children">
+                  <a href="/crear/partido">Crea un partido</a>
+                </li>
+                <li class="has-children">
+                  <a href="/unir/partido">Unirse a un partido</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="/torneos">Torneos</a></li>
+            <li><a href="/pistas">Pistas</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    
+
+
+    {#Esto sería bloque de cuerpo, lo de arriba forma parte de base#}
+    {% block body %}
+    {% endblock %}
+    
+    <footer class="site-footer border-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="mb-5">
+              <h3 class="footer-heading mb-4">BuscoEquipo</h3>
+              <p>Nuestra web se basa en fomentar el deporte, en concreto el fútbol sala. Para ello decidimos implementar un sistema para buscar equipos temporales, permanentes y torneos. Podremos ver gráficamente dónde se juega mediante mapas</p>
+            </div>
+            
+          </div>
+          <div class="col-lg-4 mb-5 mb-lg-0">
+
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="footer-heading mb-4">Síguenos</h3>
+
+                <div>
+                  <a href="https://es-es.facebook.com/" target="_blank" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                  <a href="https://twitter.com/?lang=es" target="_blank" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                  <a href="https://www.instagram.com/" target="_blank" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                  <a href="https://es.linkedin.com/" target="_blank" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="mb-5">
+              <h3 class="footer-heading mb-4">Video futsal</h3>
+
+              <div class="block-16">
+                <figure>
+                  <img src="images/street.jpg" alt="Image placeholder" class="img-fluid rounded">
+                  <a href="https://www.youtube.com/watch?v=f5_iwLaXn_M" class="play-button popup-vimeo"><span class="icon-play"></span></a>
+                </figure>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <p>
+            Desarrollado y diseñado por Alejandro Ibáñez Hurtado
+            </p>
+          </div>
+          
+        </div>
+      </div>
+    </footer>
+  </div>
+
+    <script src="{{ asset('js/jquery-3.3.1.min.js')}}"></script>
+    <script src="{{ asset('js/jquery-migrate-3.0.1.min.js')}}"></script>
+    <script src="{{ asset('js/jquery-ui.js')}}"></script>
+    <script src="{{ asset('js/popper.min.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('js/owl.carousel.min.js')}}"></script>
+    <script src="{{ asset('js/jquery.stellar.min.js')}}"></script>
+    <script src="{{ asset('js/jquery.countdown.min.js')}}"></script>
+    <script src="{{ asset('js/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{ asset('js/aos.js')}}"></script>
+    <script src="{{ asset('js/main.js')}}"></script>
+    {% block scripts %}
+    {% endblock %}
+    
+  </body>
 </html>
