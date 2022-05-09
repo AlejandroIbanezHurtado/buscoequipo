@@ -18,8 +18,14 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            form_login:
+                login_path: login
+                check_path: login
             lazy: true
             provider: app_user_provider
+            logout:
+                path: app_logout
+                target: /index
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
