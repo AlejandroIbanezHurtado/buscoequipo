@@ -44,31 +44,51 @@
           <div class="d-inline-block d-md-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
 
           <ul class="site-menu js-clone-nav d-none d-md-block">
-          <li><a href="/index">Inicio</a></li>
+          <li><a href="/index"
+          {% if app.request.pathinfo == "/index" %}
+          style="color:red;"
+          {% endif %}
+          >Inicio</a></li>
             <li class="has-children">
-              <a href="/equipos">Equipos</a>
+              <a href="/equipos"
+              {% if app.request.pathinfo == "/equipos" %}
+              style="color:red;"
+              {% endif %}
+              >Equipos</a>
               <ul class="dropdown arrow-top">
-                <li class="has-children">
+                <li class="children">
                   <a href="/crear/quipo">Crea un equipo</a>
                 </li>
-                <li class="has-children">
+                <li class="children">
                   <a href="/unir/equipo">Unirse a un equipo</a>
                 </li>
               </ul>
             </li>
             <li class="has-children">
-              <a href="/partidos">Partidos</a>
+              <a href="/partidos"
+              {% if app.request.pathinfo == "/partidos" %}
+              style="color:red;"
+              {% endif %}
+              >Partidos</a>
               <ul class="dropdown arrow-top">
-                <li class="has-children">
+                <li class="children">
                   <a href="/crear/partido">Crea un partido</a>
                 </li>
-                <li class="has-children">
+                <li class="children">
                   <a href="/unir/partido">Unirse a un partido</a>
                 </li>
               </ul>
             </li>
-            <li><a href="/torneos">Torneos</a></li>
-            <li><a href="/pistas">Pistas</a></li>
+            <li><a href="/torneos"
+            {% if app.request.pathinfo == "/torneos" %}
+            style="color:red;"
+            {% endif %}
+            >Torneos</a></li>
+            <li><a href="/pistas"
+            {% if app.request.pathinfo == "/pistas" %}
+            style="color:red;"
+            {% endif %}
+            >Pistas</a></li>
           </ul>
         </div>
       </nav>

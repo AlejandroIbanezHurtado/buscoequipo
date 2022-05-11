@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+.titulo{
+    font-family: 'Ubuntu', sans-serif;
+}
+.cajaLogin{
+    background-color: lavender;
+}

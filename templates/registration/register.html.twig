@@ -1,21 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ asset('css/customStyle.css')}}">
+{% endblock %}
 
 {% block body %}
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <h1>Register</h1>
+    <h1 class="h3 mb-3 font-weight-normal text-center mt-4 titulo shadow rounded cajaLogin">Registro</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    <div class="row d-flex justify-content-center">
+        {{ form_start(registrationForm)}}
+                {{ form_row(registrationForm.nombre, {
+                    label: 'Nombre'
+                }) }}
+                {{ form_row(registrationForm.apellidos, {
+                    label: 'Apellidos'
+                }) }}
+                {{ form_row(registrationForm.email, {
+                    label: 'Correo'
+                }) }}
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password'
+                }) }}
+                {% if form_errors(registrationForm.email) != "" %}
+                <div class="alert alert-danger" role="alert">{{ form_errors(registrationForm.email) }}</div>
+                {% endif %}
+                <button class="btn btn-primary mt-4 mb-4" type="submit">
+                    Registrar
+                </button>
+        {{ form_end(registrationForm) }}
+    </div>
 {% endblock %}
