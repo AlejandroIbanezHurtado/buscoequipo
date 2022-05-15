@@ -23,7 +23,7 @@ class Torneo
     private $equipos = [];
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipo::class)
+     * @ORM\ManyToOne(targetEntity=Equipo::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $equipo_creador;
@@ -55,12 +55,12 @@ class Torneo
         return $this;
     }
 
-    public function getEquipoCreador(): ?equipo
+    public function getEquipoCreador(): ?Equipo
     {
         return $this->equipo_creador;
     }
 
-    public function setEquipoCreador(?equipo $equipo_creador): self
+    public function setEquipoCreador(?Equipo $equipo_creador): self
     {
         $this->equipo_creador = $equipo_creador;
 

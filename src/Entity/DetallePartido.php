@@ -23,24 +23,24 @@ class DetallePartido
     private $color;
 
     /**
-     * @ORM\Column(type="string", length=2)
+     * @ORM\Column(type="integer", length=2)
      */
     private $minuto;
 
     /**
-     * @ORM\ManyToOne(targetEntity=jugador::class)
+     * @ORM\ManyToOne(targetEntity=Jugador::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $jugador;
 
     /**
-     * @ORM\ManyToOne(targetEntity=partido::class)
+     * @ORM\ManyToOne(targetEntity=Partido::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $partido;
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipo::class)
+     * @ORM\ManyToOne(targetEntity=Equipo::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $equipo;
@@ -74,36 +74,36 @@ class DetallePartido
         return $this;
     }
 
-    public function getJugador(): ?jugador
+    public function getJugador(): ?Jugador
     {
         return $this->jugador;
     }
 
-    public function setJugador(?jugador $jugador): self
+    public function setJugador(?Jugador $jugador): self
     {
         $this->jugador = $jugador;
 
         return $this;
     }
 
-    public function getPartido(): ?partido
+    public function getPartido(): ?Partido
     {
         return $this->partido;
     }
 
-    public function setPartido(?partido $partido): self
+    public function setPartido(?Partido $partido): self
     {
         $this->partido = $partido;
 
         return $this;
     }
 
-    public function getEquipo(): ?equipo
+    public function getEquipo(): ?Equipo
     {
         return $this->equipo;
     }
 
-    public function setEquipo(?equipo $equipo): self
+    public function setEquipo(?Equipo $equipo): self
     {
         $this->equipo = $equipo;
 

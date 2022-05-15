@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ValoracionRepository;
+use App\Entity\Valoracion;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ValoracionRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ValoracionRepository::class)
@@ -18,7 +19,7 @@ class Valoracion
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=jugador::class)
+     * @ORM\ManyToOne(targetEntity=Jugador::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $jugador;
@@ -34,7 +35,7 @@ class Valoracion
     private $comentario;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Partido::class, inversedBy="valoracion")
+     * @ORM\ManyToOne(targetEntity=Partido::class, inversedBy="Valoracion")
      * @ORM\JoinColumn(nullable=false)
      */
     private $partido;
@@ -44,12 +45,12 @@ class Valoracion
         return $this->id;
     }
 
-    public function getJugador(): ?jugador
+    public function getJugador(): ?Jugador
     {
         return $this->jugador;
     }
 
-    public function setJugador(?jugador $jugador): self
+    public function setJugador(?Jugador $jugador): self
     {
         $this->jugador = $jugador;
 

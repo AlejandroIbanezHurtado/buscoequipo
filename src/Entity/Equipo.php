@@ -30,7 +30,7 @@ class Equipo
     private $permanente;
 
     /**
-     * @ORM\ManyToOne(targetEntity=jugador::class)
+     * @ORM\ManyToOne(targetEntity=Jugador::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $capitan;
@@ -79,12 +79,12 @@ class Equipo
         return $this;
     }
 
-    public function getCapitan(): ?jugador
+    public function getCapitan(): ?Jugador
     {
         return $this->capitan;
     }
 
-    public function setCapitan(?jugador $capitan): self
+    public function setCapitan(?Jugador $capitan): self
     {
         $this->capitan = $capitan;
 

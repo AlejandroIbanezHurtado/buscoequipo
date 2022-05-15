@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('css/customStyle.css')}}">
+{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+    <h1 class="h3 mb-3 font-weight-normal text-center mt-4 titulo shadow rounded cajaLogin">Resetea tu contraseña</h1>
+
+    <div class="row d-flex justify-content-center">
+        {{ form_start(requestForm) }}
+            <div class="w-50">
+                {{ form_row(requestForm.email) }}
+            </div>
+            <div class="mb-3 text-center mt-4">
+                <small>
+                    Intruduce tu email para que podamos enviarte un correo con las instruccines para cambiar tu contraseña
+                </small>
+            </div>
+
+            <button class="btn btn-primary mt-4 mb-4">Enviar email</button>
+        {{ form_end(requestForm) }}
+    </div>
+{% endblock %}

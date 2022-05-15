@@ -18,13 +18,13 @@ class Alerta
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipo::class)
+     * @ORM\ManyToOne(targetEntity=Equipo::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $equipo;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=500, nullable=true)
      */
     private $mensaje;
 

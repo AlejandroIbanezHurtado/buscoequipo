@@ -193,4 +193,9 @@ class Jugador implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->email." - ".$this->nombre." ".$this->apellidos;
+    }
 }

@@ -3,6 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\DetallePartido;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class DetallePartidoCrudController extends AbstractCrudController
@@ -12,14 +16,15 @@ class DetallePartidoCrudController extends AbstractCrudController
         return DetallePartido::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            IdField::new('id')->hideOnForm(),
+            BooleanField::new('color'),
+            IntegerField::new('minuto'),
+            AssociationField::new('equipo'),
+            AssociationField::new('jugador'),
+            AssociationField::new('partido'),
         ];
     }
-    */
 }

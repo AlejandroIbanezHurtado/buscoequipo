@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\PartidoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Equipo;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PartidoRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=PartidoRepository::class)
@@ -26,12 +27,12 @@ class Partido
     private $equipo1;
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipo::class)
+     * @ORM\ManyToOne(targetEntity=Equipo::class)
      */
     private $equipo2;
 
     /**
-     * @ORM\ManyToOne(targetEntity=pista::class, inversedBy="partidos")
+     * @ORM\ManyToOne(targetEntity=Pista::class, inversedBy="partidos")
      * @ORM\JoinColumn(nullable=false)
      */
     private $pista;
@@ -67,36 +68,36 @@ class Partido
         return $this->id;
     }
 
-    public function getEquipo1(): ?equipo
+    public function getEquipo1(): ?Equipo
     {
         return $this->equipo1;
     }
 
-    public function setEquipo1(?equipo $equipo1): self
+    public function setEquipo1(?Equipo $equipo1): self
     {
         $this->equipo1 = $equipo1;
 
         return $this;
     }
 
-    public function getEquipo2(): ?equipo
+    public function getEquipo2(): ?Equipo
     {
         return $this->equipo2;
     }
 
-    public function setEquipo2(?equipo $equipo2): self
+    public function setEquipo2(?Equipo $equipo2): self
     {
         $this->equipo2 = $equipo2;
 
         return $this;
     }
 
-    public function getPista(): ?pista
+    public function getPista(): ?Pista
     {
         return $this->pista;
     }
 
-    public function setPista(?pista $pista): self
+    public function setPista(?Pista $pista): self
     {
         $this->pista = $pista;
 
