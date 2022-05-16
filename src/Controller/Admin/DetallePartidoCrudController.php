@@ -22,8 +22,8 @@ class DetallePartidoCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             ChoiceField::new('color')->setChoices([
-                'Amarillo' => 'amarillo',
-                'Rojo' => 'rojo',
+                'Amarillo' => 0,
+                'Rojo' => 1,
             ])
             ->renderExpanded(),
             IntegerField::new('minuto'),

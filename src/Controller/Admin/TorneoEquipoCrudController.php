@@ -2,26 +2,24 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Torneo;
+use App\Entity\TorneoEquipo;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
-class TorneoCrudController extends AbstractCrudController
+class TorneoEquipoCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Torneo::class;
+        return TorneoEquipo::class;
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('nombre'),
-            AssociationField::new('equipo_creador'),
+            AssociationField::new('id_torneo','Torneo'),
+            AssociationField::new('id_equipo','Equipo'),
         ];
     }
 }

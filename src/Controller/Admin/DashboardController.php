@@ -9,6 +9,8 @@ use App\Entity\Torneo;
 use App\Entity\Jugador;
 use App\Entity\Partido;
 use App\Entity\Valoracion;
+use App\Entity\TorneoEquipo;
+use App\Entity\TorneoPartido;
 use App\Entity\DetallePartido;
 use Symfony\Component\HttpFoundation\Response;
 use App\Controller\Admin\JugadorCrudController;
@@ -59,5 +61,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Pistas', 'fas fa-map', Pista::class);
         yield MenuItem::linkToCrud('Torneos', 'fas fa-trophy', Torneo::class);
         yield MenuItem::linkToCrud('Valoraciones', 'fas fa-comments', Valoracion::class);
+        yield MenuItem::linkToCrud('Torneos-Equipos', 'fas fa-edit', TorneoEquipo::class);
+        yield MenuItem::linkToCrud('Torneos-Partidos', 'fas fa-edit', TorneoPartido::class);
     }
 }

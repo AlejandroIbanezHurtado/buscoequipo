@@ -57,6 +57,11 @@ class Jugador implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $alertas;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -197,5 +202,17 @@ class Jugador implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->email." - ".$this->nombre." ".$this->apellidos;
+    }
+
+    public function getAlertas(): ?int
+    {
+        return $this->alertas;
+    }
+
+    public function setAlertas(?int $alertas): self
+    {
+        $this->alertas = $alertas;
+
+        return $this;
     }
 }
