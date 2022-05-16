@@ -18,7 +18,7 @@ class DetallePartido
     private $id;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $color;
 

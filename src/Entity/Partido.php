@@ -187,4 +187,9 @@ class Partido
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->equipo1." vs ".$this->equipo2." - ".$this->fecha_ini->format('d-m-Y H:i:s');
+    }
 }

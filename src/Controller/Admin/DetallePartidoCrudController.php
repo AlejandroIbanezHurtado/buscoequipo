@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\DetallePartido;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -20,7 +21,11 @@ class DetallePartidoCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            BooleanField::new('color'),
+            ChoiceField::new('color')->setChoices([
+                'Amarillo' => 'amarillo',
+                'Rojo' => 'rojo',
+            ])
+            ->renderExpanded(),
             IntegerField::new('minuto'),
             AssociationField::new('equipo'),
             AssociationField::new('jugador'),
