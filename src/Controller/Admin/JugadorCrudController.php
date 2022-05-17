@@ -27,9 +27,9 @@ class JugadorCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             EmailField::new('email'),
             TextField::new('nombre'),
-            TextField::new('apellidos'),
-            TextField::new('password'),
-            ImageField::new('imagen')->setUploadDir('public/bd'),
+            TextField::new('apellidos')->onlyOnForms(),
+            TextField::new('password')->onlyOnForms(),
+            ImageField::new('imagen')->setUploadDir('public/bd')->onlyOnForms(),
             BooleanField::new('isVerified','Verificado'),
             ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))

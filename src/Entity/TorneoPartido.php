@@ -29,6 +29,11 @@ class TorneoPartido
      */
     private $id_partido;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $tipo;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,6 +59,18 @@ class TorneoPartido
     public function setIdPartido(?Partido $id_partido): self
     {
         $this->id_partido = $id_partido;
+
+        return $this;
+    }
+
+    public function getTipo(): ?string
+    {
+        return $this->tipo;
+    }
+
+    public function setTipo(string $tipo): self
+    {
+        $this->tipo = $tipo;
 
         return $this;
     }

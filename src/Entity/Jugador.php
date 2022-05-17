@@ -60,7 +60,7 @@ class Jugador implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $alertas;
+    private $alertas=0;
 
     public function getId(): ?int
     {

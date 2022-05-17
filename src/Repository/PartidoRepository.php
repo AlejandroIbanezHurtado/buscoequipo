@@ -45,6 +45,17 @@ class PartidoRepository extends ServiceEntityRepository
         }
     }
 
+    public function buscaUltimoPartido()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $registros = array();
+        $sql = "select equipo.nombre as 'nombre_e1', partido.fecha_ini as 'ini_e1', partido.fecha_fin as 'fin_e2' from partido inner join equipo on equipo.id = partido.equipo1_id inner join jugador on jugador.id = equipo.capitan_id where fecha_ini > NOW() order by fecha_ini";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partidos = $resultSet->fetchAll();
+    }
+
     // /**
     //  * @return Partido[] Returns an array of Partido objects
     //  */
