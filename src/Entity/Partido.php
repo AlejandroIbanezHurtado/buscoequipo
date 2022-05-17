@@ -21,17 +21,6 @@ class Partido
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipo::class, inversedBy="partidos")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $equipo1;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Equipo::class)
-     */
-    private $equipo2;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Pista::class, inversedBy="partidos")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -66,30 +55,6 @@ class Partido
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEquipo1(): ?Equipo
-    {
-        return $this->equipo1;
-    }
-
-    public function setEquipo1(?Equipo $equipo1): self
-    {
-        $this->equipo1 = $equipo1;
-
-        return $this;
-    }
-
-    public function getEquipo2(): ?Equipo
-    {
-        return $this->equipo2;
-    }
-
-    public function setEquipo2(?Equipo $equipo2): self
-    {
-        $this->equipo2 = $equipo2;
-
-        return $this;
     }
 
     public function getPista(): ?Pista
@@ -190,6 +155,6 @@ class Partido
 
     public function __toString()
     {
-        return $this->equipo1." vs ".$this->equipo2." - ".$this->fecha_ini->format('d-m-Y H:i:s');
+        return $this->id." - ".$this->fecha_ini->format('d-m-Y H:i:s');
     }
 }

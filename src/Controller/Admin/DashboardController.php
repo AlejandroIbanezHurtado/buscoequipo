@@ -10,6 +10,7 @@ use App\Entity\Jugador;
 use App\Entity\Partido;
 use App\Entity\Valoracion;
 use App\Entity\TorneoEquipo;
+use App\Entity\PartidoEquipo;
 use App\Entity\TorneoPartido;
 use App\Entity\DetallePartido;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,5 +64,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Valoraciones', 'fas fa-comments', Valoracion::class);
         yield MenuItem::linkToCrud('Torneos-Equipos', 'fas fa-edit', TorneoEquipo::class);
         yield MenuItem::linkToCrud('Torneos-Partidos', 'fas fa-edit', TorneoPartido::class);
+        yield MenuItem::linkToCrud('Partidos-Equipos', 'fas fa-edit', PartidoEquipo::class);
     }
 }

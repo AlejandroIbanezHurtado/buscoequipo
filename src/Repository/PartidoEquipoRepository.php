@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\Partido;
+use App\Entity\PartidoEquipo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Partido|null find($id, $lockMode = null, $lockVersion = null)
- * @method Partido|null findOneBy(array $criteria, array $orderBy = null)
- * @method Partido[]    findAll()
- * @method Partido[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PartidoEquipo|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PartidoEquipo|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PartidoEquipo[]    findAll()
+ * @method PartidoEquipo[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PartidoRepository extends ServiceEntityRepository
+class PartidoEquipoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Partido::class);
+        parent::__construct($registry, PartidoEquipo::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Partido $entity, bool $flush = true): void
+    public function add(PartidoEquipo $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class PartidoRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Partido $entity, bool $flush = true): void
+    public function remove(PartidoEquipo $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -45,18 +45,8 @@ class PartidoRepository extends ServiceEntityRepository
         }
     }
 
-    public function obtenUltimoPartido()
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "select equipo.nombre as 'nombre_equipo', fecha_ini, fecha_fin from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where fecha_ini > NOW() order by fecha_ini limit 2";
-        $stmt = $conn->prepare($sql);
-        $resultSet = $stmt->executeQuery();
-        $partidos = $resultSet->fetchAll();
-        return $partidos;
-    }
-
     // /**
-    //  * @return Partido[] Returns an array of Partido objects
+    //  * @return PartidoEquipo[] Returns an array of PartidoEquipo objects
     //  */
     /*
     public function findByExampleField($value)
@@ -73,7 +63,7 @@ class PartidoRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Partido
+    public function findOneBySomeField($value): ?PartidoEquipo
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
