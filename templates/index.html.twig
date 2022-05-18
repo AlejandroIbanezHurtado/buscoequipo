@@ -1,4 +1,7 @@
 {% extends "base.html.twig "%}
+{% block styles %}
+  <link rel="stylesheet" href="{{ asset('css/lib/spinner.css')}}">
+{% endblock %}
 {% block body %}
     {#Esto sería bloque de cuerpo, lo de arriba forma parte de base#}
     <div class="slide-one-item home-slider owl-carousel">
@@ -81,16 +84,7 @@
             <div id="date-countdown"></div>
           </div>
 
-          <div class="ml-auto pr-4 order-md-2">
-            <div class="h5 text-black text-uppercase text-center text-lg-left">
-              <div class="d-block d-md-inline-block mb-3 mb-lg-0">
-                <img src="images/img_1_sq.jpg" alt="Image" class="mr-3 image"><span class="d-block d-md-inline-block ml-0 ml-md-3 ml-lg-0">Equipo 1</span>
-              </div>
-              <span class="text-muted mx-3 text-normal mb-3 mb-lg-0 d-block d-md-inline ">vs</span> 
-              <div class="d-block d-md-inline-block">
-                <img src="images/img_3_sq.jpg" alt="Image" class="mr-3 image"><span class="d-block d-md-inline-block ml-0 ml-md-3 ml-lg-0">Equipo 2</span>
-              </div>
-            </div>
+          <div class="ml-auto pr-4 order-md-2" id="contProxPartido">
           </div>
         </div>
 
@@ -848,4 +842,5 @@
     <div id="map"></div>
 {% endblock %}
 {% block scripts %}
+<script src="{{ asset('js/lib/lib-index.js')}}"></script>
 {% endblock %}

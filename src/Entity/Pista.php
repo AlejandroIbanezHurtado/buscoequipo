@@ -30,11 +30,6 @@ class Pista
     private $descripcion;
 
     /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $coordenadas;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $imagen;
@@ -74,18 +69,6 @@ class Pista
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    public function getCoordenadas(): ?string
-    {
-        return $this->coordenadas;
-    }
-
-    public function setCoordenadas(string $coordenadas): self
-    {
-        $this->coordenadas = $coordenadas;
 
         return $this;
     }

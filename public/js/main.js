@@ -213,18 +213,18 @@ jQuery(document).ready(function($) {
 	};
 	siteStellar();
 
-	var siteCountDown = function() {
+	// var siteCountDown = function() {
 
-		$('#date-countdown').countdown('2022/05/08 21:20:00', function(event) {
-		  var $this = $(this).html(event.strftime(''
-		    + '<span class="countdown-block"><span class="label">%w</span> sem </span>'
-		    + '<span class="countdown-block"><span class="label">%d</span> dias </span>'
-		    + '<span class="countdown-block"><span class="label">%H</span> hr </span>'
-		    + '<span class="countdown-block"><span class="label">%M</span> min </span>'
-		    + '<span class="countdown-block"><span class="label">%S</span> seg</span>'));
-		});
+	// 	$('#date-countdown').countdown('2022/05/08 21:20:00', function(event) {
+	// 	  var $this = $(this).html(event.strftime(''
+	// 	    + '<span class="countdown-block"><span class="label">%w</span> sem </span>'
+	// 	    + '<span class="countdown-block"><span class="label">%d</span> dias </span>'
+	// 	    + '<span class="countdown-block"><span class="label">%H</span> hr </span>'
+	// 	    + '<span class="countdown-block"><span class="label">%M</span> min </span>'
+	// 	    + '<span class="countdown-block"><span class="label">%S</span> seg</span>'));
+	// 	});
 				
-	};
-	siteCountDown();
+	// };
+	// siteCountDown();
 
 });

@@ -48,7 +48,7 @@ class PartidoRepository extends ServiceEntityRepository
     public function obtenUltimoPartido()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select equipo.nombre as 'nombre_equipo', fecha_ini, fecha_fin from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where fecha_ini > NOW() order by fecha_ini limit 2";
+        $sql = "select equipo.nombre as 'nombre_equipo', fecha_ini, fecha_fin, equipo.escudo from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where fecha_ini > NOW() order by fecha_ini limit 2";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $partidos = $resultSet->fetchAll();

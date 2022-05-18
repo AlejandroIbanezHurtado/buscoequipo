@@ -22,7 +22,6 @@ class PistaCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('nombre'),
             TextEditorField::new('descripcion'),
-            TextField::new('coordenadas'),
             ImageField::new('imagen')->setUploadDir('public/bd'),
         ];
     }
