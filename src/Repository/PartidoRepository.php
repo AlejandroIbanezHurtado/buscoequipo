@@ -55,6 +55,19 @@ class PartidoRepository extends ServiceEntityRepository
         return $partidos;
     }
 
+    //primero sacamos id del partido que queremos
+    select * from partido inner join torneo_partido on partido.id = torneo_partido.id_partido_id where partido.fecha_fin < NOW() order by partido.fecha_fin desc limit 1
+
+    //despues sacamos los datos del partido
+    //primero sacamos los datos propios de los equipos
+    select * from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where partido.id=2
+
+    //y despues sacamos los datos del resultado
+    select * from detalle_partido where detalle_partido.partido_id = {id_sacado}
+
+    
+
+
     // /**
     //  * @return Partido[] Returns an array of Partido objects
     //  */
