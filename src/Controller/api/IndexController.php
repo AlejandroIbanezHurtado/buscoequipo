@@ -30,7 +30,19 @@ class IndexController extends AbstractController
     public function obtenIndex1(ManagerRegistry $doctrine): Response
     {
         //Ultimo partido jugado en torneo -- torneo
+        $obj = new stdClass();
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+
+        $id = $repositoryPartido->obtenUltimoPartidoJugadoTorneo();
+        $obj->nombre_torneo = $id[0]["nombre"];
+        $obj->tipo = $id[0]["tipo"];
+        $obj->datos_equipos = $repositoryPartido->obtenDatosEquiposPorId($id[0]["id"]);
+        $obj->goles_partido = $repositoryPartido->obtenGolesPartidoPorId($id[0]["id"]);
+
         //Ultimos partidos (9) -- partido
+        $obj->partidos = $repositoryPartido->obtenPartidosIndex();
+
+        return new Response(json_encode($obj));
     }
 
     /**

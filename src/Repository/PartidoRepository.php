@@ -48,22 +48,52 @@ class PartidoRepository extends ServiceEntityRepository
     public function obtenUltimoPartido()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select equipo.nombre as 'nombre_equipo', fecha_ini, fecha_fin, equipo.escudo from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where fecha_ini > NOW() order by fecha_ini limit 2";
+        $sql = "select distinct equipo.nombre as 'nombre_equipo', fecha_ini, fecha_fin, equipo.escudo from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where fecha_ini > NOW() order by fecha_ini limit 2";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $partidos = $resultSet->fetchAll();
         return $partidos;
     }
 
-    //primero sacamos id del partido que queremos
-    select * from partido inner join torneo_partido on partido.id = torneo_partido.id_partido_id where partido.fecha_fin < NOW() order by partido.fecha_fin desc limit 1
+    public function obtenUltimoPartidoJugadoTorneo()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select partido.id, torneo.nombre, tipo from partido inner join torneo_partido on partido.id = torneo_partido.id_partido_id inner join torneo on torneo.id = torneo_partido.id_torneo_id where partido.fecha_fin < NOW() order by partido.fecha_fin desc limit 1";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $id = $resultSet->fetchAll();
+        return $id;
+    }
 
-    //despues sacamos los datos del partido
-    //primero sacamos los datos propios de los equipos
-    select * from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where partido.id=2
+    public function obtenDatosEquiposPorId($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select distinct equipo.id, escudo, equipo.nombre, partido.fecha_ini from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id where partido.id=${id}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $datos_equipos = $resultSet->fetchAll();
+        return $datos_equipos;
+    }
 
-    //y despues sacamos los datos del resultado
-    select * from detalle_partido where detalle_partido.partido_id = {id_sacado}
+    public function obtenGolesPartidoPorId($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select equipo_id, count(id) as 'goles' from detalle_partido where partido_id = ${id} AND color is null group by equipo_id";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $datos_partido = $resultSet->fetchAll();
+        return $datos_partido;
+    }
+
+    public function obtenPartidosIndex()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select partido_id, equipo_id, count(partido_id) as 'goles', nombre, escudo from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id where color is null group by equipo_id,partido_id order by rand() limit 9";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partidos = $resultSet->fetchAll();
+        return $partidos;
+    }
 
     
 
