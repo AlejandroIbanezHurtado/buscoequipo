@@ -18,11 +18,6 @@ class DetallePartido
     private $id;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $color;
-
-    /**
      * @ORM\Column(type="integer", length=2)
      */
     private $minuto;
@@ -44,6 +39,21 @@ class DetallePartido
      * @ORM\JoinColumn(nullable=false)
      */
     private $equipo;
+
+    /**
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    private $amarilla;
+
+    /**
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    private $roja;
+
+    /**
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    private $gol;
 
     public function getId(): ?int
     {
@@ -106,6 +116,42 @@ class DetallePartido
     public function setEquipo(?Equipo $equipo): self
     {
         $this->equipo = $equipo;
+
+        return $this;
+    }
+
+    public function isAmarilla(): ?bool
+    {
+        return $this->amarilla;
+    }
+
+    public function setAmarilla(bool $amarilla): self
+    {
+        $this->amarilla = $amarilla;
+
+        return $this;
+    }
+
+    public function isRoja(): ?bool
+    {
+        return $this->roja;
+    }
+
+    public function setRoja(bool $roja): self
+    {
+        $this->roja = $roja;
+
+        return $this;
+    }
+
+    public function isGol(): ?bool
+    {
+        return $this->gol;
+    }
+
+    public function setGol(bool $gol): self
+    {
+        $this->gol = $gol;
 
         return $this;
     }

@@ -45,6 +45,16 @@ class EquipoRepository extends ServiceEntityRepository
         }
     }
 
+    public function obtenEquiposIndex($limit = 9)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos, jugador.imagen from equipo inner join jugador on equipo.capitan_id = jugador.id order by rand() limit ${limit}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
     // /**
     //  * @return Equipo[] Returns an array of Equipo objects
     //  */

@@ -78,17 +78,23 @@ class PartidoRepository extends ServiceEntityRepository
     public function obtenGolesPartidoPorId($id)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select equipo_id, count(id) as 'goles' from detalle_partido where partido_id = ${id} AND color is null group by equipo_id";
+        $sql = "select equipo_id, count(id) as 'goles' from detalle_partido where partido_id = ${id} AND gol=1 group by equipo_id";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $datos_partido = $resultSet->fetchAll();
         return $datos_partido;
     }
 
-    public function obtenPartidosIndex()
+    public function obtenPartidosIndex($limit = 9)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select partido_id, equipo_id, count(partido_id) as 'goles', nombre, escudo from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id where color is null group by equipo_id,partido_id order by rand() limit 9";
+        $sql = "select distinct id_partido_id as partido_id, id_equipo_id as equipo_id, equipo.nombre, equipo.escudo, goles 
+        from equipo inner join partido_equipo on partido_equipo.id_equipo_id=equipo.id 
+        left join (select P.partido_id, P.equipo_id, P.nombre, P.escudo, count(*) as 'goles' 
+        from (select detalle_partido.partido_id, detalle_partido.equipo_id, equipo.nombre, equipo.escudo, Par.fecha_ini, detalle_partido.gol 
+        from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id 
+        inner join (select * from partido order by fecha_ini desc limit ${limit}) as Par on detalle_partido.partido_id = Par.id where gol=1) as P 
+        group by P.partido_id, P.equipo_id order by P.partido_id) as h on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id order by partido_equipo.id_partido_id";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $partidos = $resultSet->fetchAll();

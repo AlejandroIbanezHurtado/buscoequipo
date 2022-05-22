@@ -3,6 +3,8 @@
 namespace App\Controller\api;
 
 use stdClass;
+use App\Entity\Pista;
+use App\Entity\Equipo;
 use App\Entity\Partido;
 use App\Entity\PartidoEquipo;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,7 +42,12 @@ class IndexController extends AbstractController
         $obj->goles_partido = $repositoryPartido->obtenGolesPartidoPorId($id[0]["id"]);
 
         //Ultimos partidos (9) -- partido
-        $obj->partidos = $repositoryPartido->obtenPartidosIndex();
+        $partidos = $repositoryPartido->obtenPartidosIndex();
+        for($i=0;$i<count($partidos);$i++)
+        {
+            if($partidos[$i]["goles"]==null) $partidos[$i]["goles"]="0";
+        }
+        $obj->partidos = $partidos;
 
         return new Response(json_encode($obj));
     }
@@ -51,6 +58,13 @@ class IndexController extends AbstractController
     public function obtenIndex2(ManagerRegistry $doctrine): Response
     {
         //Equipos random (9) -- equipo
+        $obj = new stdClass();
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $obj->equipos=$repositoryEquipo->obtenEquiposIndex();
+
         //Pistas random (3) -- pista
+        $repositoryPista = $doctrine->getRepository(Pista::class);
+        $obj->pistas=$repositoryPista->obtenPistasIndex();
+        return new Response(json_encode($obj));
     }
 }
