@@ -1,41 +1,35 @@
 {% extends "base.html.twig "%}
+{% block styles %}
+  <link rel="stylesheet" href="{{ asset('css/lib/spinner.css')}}">
+{% endblock %}
 {% block body %}
+<style>
+a:hover{
+  cursor: pointer;
+}
+</style>
     <div class="site-blocks-cover overlay" style="background-image: url(images/hero_bg_3.jpg);" data-aos="fade" data-stellar-background-ratio="0.5">
       <div class="container">
         <div class="row align-items-center justify-content-start">
           <div class="col-md-6 text-center text-md-left" data-aos="fade-up" data-aos-delay="400">
-            <h1 class="bg-text-line">Meet The Team</h1>
-            <p class="mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad maxime velit nostrum praesentium voluptatem. Mollitia perferendis dolore dolores.</p>
+            <h1 class="bg-text-line">Equipos</h1>
+            <p class="mt-4">Crea o únete a equipos permanentes o temporales(para ese partido)</p>
+            <p class="mt-4">Los equipos están formados por un mínimo de 10 personas y un máximo de 12</p>
           </div>
         </div>
       </div>
     </div>
     
     <div class="site-section">
-      <div class="container">
+      <div class="container" id="contEquiposPerma">
         <div class="row">
           <div class="col-md-12 text-center mb-5">
-            <h2 class="text-black">Team</h2>
+            <h2 class="text-black">Equipos permanentes</h2>
+            <h5 class="text-secondary">Estos equipos son fijos, no puedes estar en dos al mismo tiempo</h5>
           </div>
         </div>
-        <div class="row">
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">10</span>
-              <img src="images/img_1_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Guzman</h2>
-              <span class="position">Coach</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">4</span>
-              <img src="images/img_4_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Caballero</h2>
-              <span class="position">Defender</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
+        <div class="row justify-content-center">
+          {# <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
             <div class="player mb-5">
               <span class="team-number">8</span>
               <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
@@ -66,151 +60,91 @@
               <h2>Marcos</h2>
               <span class="position">Forward</span>
             </div>
-          </div>
+          </div> #}
+          <div class="loader mb-5"></div>
         </div>
-        
-        <div class="row">
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">10</span>
-              <img src="images/img_1_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Guzman</h2>
-              <span class="position">Coach</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">4</span>
-              <img src="images/img_4_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Caballero</h2>
-              <span class="position">Defender</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">8</span>
-              <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Mercado</h2>
-              <span class="position">Goal Keeper</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">5</span>
-              <img src="images/img_1_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Fazio</h2>
-              <span class="position">Defender</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">3</span>
-              <img src="images/img_4_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Perez</h2>
-              <span class="position">Midfielder</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">2</span>
-              <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Marcos</h2>
-              <span class="position">Forward</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">10</span>
-              <img src="images/img_1_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Guzman</h2>
-              <span class="position">Coach</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">4</span>
-              <img src="images/img_4_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Caballero</h2>
-              <span class="position">Defender</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">8</span>
-              <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Mercado</h2>
-              <span class="position">Goal Keeper</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">5</span>
-              <img src="images/img_1_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Fazio</h2>
-              <span class="position">Defender</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">3</span>
-              <img src="images/img_4_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Perez</h2>
-              <span class="position">Midfielder</span>
-            </div>
-          </div>
-          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
-            <div class="player mb-5">
-              <span class="team-number">2</span>
-              <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
-              <h2>Marcos</h2>
-              <span class="position">Forward</span>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <div class="row">
+          <div class="col-md-12 text-center">
+                <div class="site-block-27" id="paginadorPerma">
+                  <ul>
+                    <li><a>&lt;</a></li>
+                    <li class="active"><span>1</span></li>
+                    {# <li><a>2</a></li>
+                    <li><a>3</a></li>
+                    <li><a>4</a></li>
+                    <li><a>5</a></li> #}
+                    <li><a>&gt;</a></li>
+                  </ul>
+                </div>
+              </div>
+        </div>
     </div>
   
 
-    <div class="site-section feature-blocks-1 no-margin-top">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-12 text-center">
-            <h2 class="text-black">Match Highlights</h2>
+    <div class="site-section">
+      <div class="container" id="contEquiposTempo">
+        <div class="row">
+          <div class="col-md-12 text-center mb-5">
+            <h2 class="text-black">Equipos temporales</h2>
+            <h5 class="text-secondary">Los equipos temporales son equipos de un sólo partido. Puedes jugar en estos equipos aunque estes asociado a un equipo permanente</h5>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6 col-lg-4" data-aos="fade" data-aos-delay="100">
-            <div class="p-3 p-md-5 feature-block-1 mb-5 mb-lg-0 bg" style="background-image: url('images/img_1.jpg');">
-              <div class="text">
-                <h2 class="h5 text-white">Russia's World Cup Championship</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos repellat autem illum nostrum sit distinctio!</p>
-                <p class="mb-0"><a href="#" class="btn btn-primary btn-sm px-4 py-2 rounded-0">Read More</a></p>
-              </div>
+        <div class="row justify-content-center">
+          {# <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
+            <div class="player mb-5">
+              <span class="team-number">8</span>
+              <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
+              <h2>Mercado</h2>
+              <span class="position">Goal Keeper</span>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4" data-aos="fade" data-aos-delay="200">
-            <div class="p-3 p-md-5 feature-block-1 mb-5 mb-lg-0 bg" style="background-image: url('images/img_2.jpg');">
-              <div class="text">
-                <h2 class="h5 text-white">Russia's World Cup Championship</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos repellat autem illum nostrum sit distinctio!</p>
-                <p class="mb-0"><a href="#" class="btn btn-primary btn-sm px-4 py-2 rounded-0">Read More</a></p>
-              </div>
+          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
+            <div class="player mb-5">
+              <span class="team-number">5</span>
+              <img src="images/img_1_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
+              <h2>Fazio</h2>
+              <span class="position">Defender</span>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4" data-aos="fade" data-aos-delay="300">
-            <div class="p-3 p-md-5 feature-block-1 mb-5 mb-lg-0 bg" style="background-image: url('images/img_3.jpg');">
-              <div class="text">
-                <h2 class="h5 text-white">Russia's World Cup Championship</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos repellat autem illum nostrum sit distinctio!</p>
-                <p class="mb-0"><a href="#" class="btn btn-primary btn-sm px-4 py-2 rounded-0">Read More</a></p>
-              </div>
+          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
+            <div class="player mb-5">
+              <span class="team-number">3</span>
+              <img src="images/img_4_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
+              <h2>Perez</h2>
+              <span class="position">Midfielder</span>
             </div>
           </div>
+          <div class="mb-4 mb-lg-0 col-6 col-md-4 col-lg-2 text-center">
+            <div class="player mb-5">
+              <span class="team-number">2</span>
+              <img src="images/img_3_sq.jpg" alt="Image" class="img-fluid image rounded-circle">
+              <h2>Marcos</h2>
+              <span class="position">Forward</span>
+            </div>
+          </div> #}
+          <div class="loader mb-5"></div>
         </div>
       </div>
+
+      <div class="row">
+          <div class="col-md-12 text-center">
+                <div class="site-block-27" id="paginadorTempo">
+                  <ul>
+                    <li><a>&lt;</a></li>
+                    <li class="active"><span>1</span></li>
+                    {# <li><a>2</a></li>
+                    <li><a>3</a></li>
+                    <li><a>4</a></li>
+                    <li><a>5</a></li> #}
+                    <li><a>&gt;</a></li>
+                  </ul>
+                </div>
+              </div>
+        </div>
     </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ asset('js/lib/lib-equipos.js')}}"></script>
 {% endblock %}

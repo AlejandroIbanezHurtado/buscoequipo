@@ -55,6 +55,41 @@ class EquipoRepository extends ServiceEntityRepository
         return $equipos;
     }
 
+    public function obtenEquiposPerma($perma=1)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from equipo where permanente=${perma}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
+    public function obtenEquiposPermaPaginados(int $pagina, int $filas, $perma=1)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $registros = array();
+        $sql = "select equipo.id, equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos from equipo inner join jugador on equipo.capitan_id = jugador.id where permanente=${perma} order by rand()";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $registros = $resultSet->fetchAll();
+        $n_total = count($registros);
+
+        $total = count($registros);
+        $paginas = ceil($total /$filas);
+        $registros = array();
+        if ($pagina <= $paginas)
+        {
+            $inicio = ($pagina-1) * $filas;
+            $sql = "select equipo.id, equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos from equipo inner join jugador on equipo.capitan_id = jugador.id where permanente=${perma} order by rand() limit $inicio, $filas";
+            $stmt = $conn->prepare($sql);
+            $resultSet = $stmt->executeQuery();
+            $registros = $resultSet->fetchAll(); 
+        }
+        return $registros;
+    }
+
     // /**
     //  * @return Equipo[] Returns an array of Equipo objects
     //  */
