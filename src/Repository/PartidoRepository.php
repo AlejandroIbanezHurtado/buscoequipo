@@ -94,7 +94,8 @@ class PartidoRepository extends ServiceEntityRepository
         from (select detalle_partido.partido_id, detalle_partido.equipo_id, equipo.nombre, equipo.escudo, Par.fecha_ini, detalle_partido.gol 
         from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id 
         inner join (select * from partido order by fecha_ini desc limit ${limit}) as Par on detalle_partido.partido_id = Par.id where gol=1) as P 
-        group by P.partido_id, P.equipo_id order by P.partido_id) as h on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id order by partido_equipo.id_partido_id";
+        group by P.partido_id, P.equipo_id order by P.partido_id) as h 
+        on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id order by partido_equipo.id_partido_id";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $partidos = $resultSet->fetchAll();
