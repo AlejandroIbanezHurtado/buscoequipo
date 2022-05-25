@@ -70,7 +70,7 @@ class EquipoRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
 
         $registros = array();
-        $sql = "select equipo.id, equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos, count(equipo.id) as 'numero' from equipo inner join jugador on equipo.capitan_id = jugador.id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id where permanente=${perma} group by equipo.id order by rand()";
+        $sql = "select equipo.id, equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos, count(equipo.id) as 'numero' from equipo inner join jugador on equipo.capitan_id = jugador.id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id where permanente=${perma} group by equipo.id";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $registros = $resultSet->fetchAll();
@@ -82,7 +82,7 @@ class EquipoRepository extends ServiceEntityRepository
         if ($pagina <= $paginas)
         {
             $inicio = ($pagina-1) * $filas;
-            $sql = "select equipo.id, equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos, count(equipo.id) as 'numero' from equipo inner join jugador on equipo.capitan_id = jugador.id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id where permanente=${perma} group by equipo.id order by rand() limit $inicio, $filas";
+            $sql = "select equipo.id, equipo.nombre as 'nombre_equipo', equipo.escudo, jugador.nombre as 'nombre_jugador', jugador.apellidos, count(equipo.id) as 'numero' from equipo inner join jugador on equipo.capitan_id = jugador.id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id where permanente=${perma} group by equipo.id limit $inicio, $filas";
             $stmt = $conn->prepare($sql);
             $resultSet = $stmt->executeQuery();
             $registros = $resultSet->fetchAll(); 
