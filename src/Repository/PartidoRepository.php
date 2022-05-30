@@ -103,6 +103,15 @@ class PartidoRepository extends ServiceEntityRepository
     }
 
     
+    public function obtenEquipoTempoEntreFecha($id_partido, $fecha_ini, $fecha_fin)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from partido WHERE NOT ((date_add('${fecha_ini}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin) OR (date_sub('${fecha_fin}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin)) and id = ${id_partido}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partido = $resultSet->fetchAll();
+        return $partido;
+    }
 
 
     // /**

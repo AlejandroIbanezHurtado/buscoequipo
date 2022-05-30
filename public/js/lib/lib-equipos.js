@@ -15,7 +15,11 @@ $(function(){
                     $(".fila-"+rm).remove();
                 }
                 eli = 0;
-                if(perma==1) eli="1";
+                p = "tempo";
+                if(perma==1){
+                    eli="1";
+                    p="perma";
+                }
                 if(perma==0) eli="2";
                 fila=$("<div class='row justify-content-center fila-rm"+eli+"'><div>");
                 fila2=$("<div class='row justify-content-center fila-rm"+eli+"'><div>");

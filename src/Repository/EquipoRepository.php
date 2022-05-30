@@ -55,6 +55,36 @@ class EquipoRepository extends ServiceEntityRepository
         return $equipos;
     }
 
+    public function obtenEquipoCompleto($perma=1,$id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select count(equipo.id) as 'numero' from equipo inner join jugador on equipo.capitan_id = jugador.id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id where permanente=${perma} and equipo.id=${id} group by equipo.id";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos[0]["numero"];
+    }
+
+    public function obtenEquipo($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from equipo where id=${id}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
+    public function obtenJugadoresPorEquipo($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select jugador_id, jugador.nombre, jugador.apellidos, jugador.imagen from (equipo_jugador left join equipo on equipo.capitan_id = equipo_jugador.jugador_id) inner join jugador on equipo_jugador.jugador_id = jugador.id where equipo_jugador.equipo_id = ${id} order by equipo.capitan_id desc";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
     public function obtenEquiposPerma($perma=1)
     {
         $conn = $this->getEntityManager()->getConnection();

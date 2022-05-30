@@ -1,0 +1,23 @@
+{% extends "base.html.twig "%}
+{% block styles %}
+<style>
+body{
+  background-image: url('/images/full.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.alert{
+  background-color: #9c5656;
+  color: white;
+  font-weight: 600;
+  border-color: black;
+}
+</style>
+{% endblock %}
+{% block body %}
+<div class="m-5">
+  <div class="alert alert-danger m-5 text-center shadow-lg" role="alert">
+    {{ texto }}
+  </div>
+</div>
+{% endblock %}
