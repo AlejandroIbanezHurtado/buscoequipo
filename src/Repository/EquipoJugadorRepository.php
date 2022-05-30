@@ -39,6 +39,17 @@ class EquipoJugadorRepository extends ServiceEntityRepository
         }
     }
 
+    public function encontrarPorJE($id_jugador, $id_equipo)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from equipo_jugador where jugador_id = ${id_jugador} and equipo_id = ${id_equipo}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipoJugador = $resultSet->fetchAll();
+        return $equipoJugador;
+    }
+
+
 //    /**
 //     * @return EquipoJugador[] Returns an array of EquipoJugador objects
 //     */

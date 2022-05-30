@@ -1,8 +1,8 @@
 $(function(){
     var contPerma = $("#contEquiposPerma");
-    var contTempo = $("#contEquiposTempo");
+    // var contTempo = $("#contEquiposTempo");
     var pagPerma = $("#paginadorPerma");
-    var pagTempo = $("#paginadorTempo");
+    // var pagTempo = $("#paginadorTempo");
 
     function obtenEquiposPerma(pagina = 1, fila = 4, perma=1, contenedor,rm,paginador,b=0){
         $.getJSON("/api/obtenEquiposPermaPaginados/"+pagina+"/"+fila+"/"+perma,function(result){
@@ -67,7 +67,7 @@ $(function(){
         })
     }
     programaClicks(pagPerma,"rm1",contPerma,1);
-    programaClicks(pagTempo,"rm2",contTempo,0);
+    // programaClicks(pagTempo,"rm2",contTempo,0);
     function programaClicks(paginador,rm,cont,perma){
         paginador.find(".anterior").on("click",function(){
             if(parseInt($(this).parent().parent().attr("pag"))>1) 
@@ -94,5 +94,5 @@ $(function(){
     
     
     obtenEquiposPerma(1,8,1,contPerma,"rm1",pagPerma);
-    obtenEquiposPerma(1,8,0,contTempo,"rm2",pagTempo);
+    // obtenEquiposPerma(1,8,0,contTempo,"rm2",pagTempo);
 })

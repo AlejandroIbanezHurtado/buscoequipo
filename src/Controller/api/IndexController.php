@@ -67,4 +67,14 @@ class IndexController extends AbstractController
         $obj->pistas=$repositoryPista->obtenPistasIndex();
         return new Response(json_encode($obj));
     }
+
+    /**
+     * @Route("/api/dameSesion", name="dameSesion")
+     */
+    public function dameSesion(ManagerRegistry $doctrine): Response
+    {
+        if(!isset($_SESSION)) session_start();
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        return new Response(json_encode($email));
+    }
 }

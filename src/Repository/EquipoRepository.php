@@ -78,7 +78,7 @@ class EquipoRepository extends ServiceEntityRepository
     public function obtenJugadoresPorEquipo($id)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select jugador_id, jugador.nombre, jugador.apellidos, jugador.imagen from (equipo_jugador left join equipo on equipo.capitan_id = equipo_jugador.jugador_id) inner join jugador on equipo_jugador.jugador_id = jugador.id where equipo_jugador.equipo_id = ${id} order by equipo.capitan_id desc";
+        $sql = "select jugador_id, jugador.email,  jugador.nombre, jugador.apellidos, jugador.imagen from (equipo_jugador left join equipo on equipo.capitan_id = equipo_jugador.jugador_id) inner join jugador on equipo_jugador.jugador_id = jugador.id where equipo_jugador.equipo_id = ${id} order by equipo.capitan_id desc";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $equipos = $resultSet->fetchAll();

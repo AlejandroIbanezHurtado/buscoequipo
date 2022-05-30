@@ -11,7 +11,28 @@ $(function(){
     })
 
     $.getJSON("/api/obtenJugadoresPorEquipo/"+id,function(result){
-        console.log(result);
+        $.getJSON("/api/dameSesion/",function(result2){
+            for(i=0;i<result.jugadores.length;i++)
+            {
+                if(result2===result.jugadores[i].email)
+                {
+                    $(".btn-success").remove();
+                    $("form").append($("<button class='btn btn-danger my-4' id='botonSalir'>Salir</button>").on("click",function(event){
+                            event.preventDefault();
+                            $.post("/api/borraJugadorEnEquipo/"+id,
+                            {
+                                id_equipo: id
+                            },function(data){
+                                $("#modalHora").find(".modal-body").children().remove();
+                                $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+                                $("#modalHora").find(".modal-body").append("<p>"+data+"</p>");
+                                $("#modalHora").modal("show");
+                            })
+                        }))
+                }
+                
+            }
+        })
         for(i=0;i<result.jugadores.length;i++)
         {
             color = "alert-secondary";
@@ -29,7 +50,7 @@ $(function(){
         }
     })
 
-    $(".btn-success").on("click",function(event){
+    $("#boton").on("click",function(event){
         event.preventDefault();
         $.post("/api/insertaJugadorEnEquipo/"+id,
         {
@@ -39,7 +60,6 @@ $(function(){
             $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
             $("#modalHora").find(".modal-body").append("<p>"+data+"</p>");
             $("#modalHora").modal("show");
-            console.log(data);
         })
     })
 })

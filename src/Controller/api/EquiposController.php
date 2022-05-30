@@ -5,6 +5,7 @@ namespace App\Controller\api;
 use stdClass;
 use App\Entity\Equipo;
 use App\Entity\Jugador;
+use App\Entity\Partido;
 use App\Entity\EquipoJugador;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,6 +60,7 @@ class EquiposController extends AbstractController
      */
     public function insertaJugadorEnEquipo(ManagerRegistry $doctrine, $id): Response
     {
+        $obj = new stdClass();
         $entityManager = $doctrine->getManager();
         $repositoryEquipo = $doctrine->getRepository(Equipo::class);
         $repositoryJugador = $doctrine->getRepository(Jugador::class);
@@ -98,37 +100,32 @@ class EquiposController extends AbstractController
             }
             return new Response($respuesta);
         }
-        else
-        {
-            //REQUISITOS PARA UNIRSE A EQUIPO TEMPO
-            $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
-            $respuesta = $this->render('equipo/unirseEquipo.html.twig', [
-                'controller_name' => 'EquipoController',
-            ]);
-            $equipo = $repositoryEquipo->obtenEquipoCompleto(1,$id);
-            $boolEquipo = $repositoryJugador->obtenJugadorEquipo($email);
+    }
+
+
+
+
+
+
+
+    /**
+     * @Route("api/borraJugadorEnEquipo/{id}", name="borraJugadorEnEquipo")
+     */
+    public function borraJugadorEnEquipo(ManagerRegistry $doctrine, $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipoJugador = $doctrine->getRepository(EquipoJugador::class);
+
+        $id_equipo = $_POST['id_equipo'];
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        $id_jugador = $repositoryJugador->findOneBy(['email' => $email])->getId();
+        $id = $repositoryEquipoJugador->encontrarPorJE(strval($id_jugador), strval($id_equipo))[0]['id'];
+        $ej = $repositoryEquipoJugador->find($id);
+        $repositoryEquipoJugador->remove($ej, true);
             
-            $equipo = $repositoryPartido->obtenEquipoTempoEntreFecha($id_partido, $fecha_ini, $fecha_fin); //devuelve el equipo disponible o null
-            if(intval($equipo)>=12) $respuesta = $this->render('equipo/equipolleno.html.twig', ['controller_name' => 'EquipoController', 'texto' => "Lo sentimos, este equipo está lleno",]);
-            //if entre fechaini y fecha_fin coincide con otra fecha_ini y fecha_fin respuesta = $this->render('equipo/equipolleno.html.twig', ['controller_name' => 'EquipoController', 'texto' => "Lo sentimos, tienes un partido a esa hora",]);
-            // select * from partido WHERE NOT ((date_add('${fecha_ini}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin) OR (date_sub('${fecha_fin}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin)) and id = ${id_partido}
-
-
-            //UNIRSE A EQUIPO GENERICO
-            $id_equipo = $_POST['id_equipo'];
-            $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
-
-            $e = $repositoryEquipo->find($id_equipo);
-            $j = $repositoryJugador->findOneBy(['email' => $email]);
-            $ej = new EquipoJugador();
-            $ej->setEquipo($e);
-            $ej->setJugador($j);
-            $entityManager->persist($ej);
-            $entityManager->flush();
-            return new Response(json_encode($ej));
-        }
-
-        
+        return new Response("Te has borrado del equipo");
         
     }
 }
