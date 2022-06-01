@@ -5,6 +5,7 @@ namespace App\Controller\api;
 use stdClass;
 use App\Entity\Pista;
 use App\Entity\Equipo;
+use App\Entity\Jugador;
 use App\Entity\Partido;
 use App\Entity\PartidoEquipo;
 use Doctrine\Persistence\ManagerRegistry;
@@ -73,8 +74,10 @@ class IndexController extends AbstractController
      */
     public function dameSesion(ManagerRegistry $doctrine): Response
     {
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
         if(!isset($_SESSION)) session_start();
         $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
-        return new Response(json_encode($email));
+        $j = $repositoryJugador->obtenJugadorPorEmail($email);
+        return new Response(json_encode($j));        
     }
 }

@@ -128,4 +128,32 @@ class EquiposController extends AbstractController
         return new Response("Te has borrado del equipo");
         
     }
+
+    /**
+     * @Route("api/borraJugadorEnEquipoCapitan/{id}", name="borraJugadorEnEquipoCapitan")
+     */
+    public function borraJugadorEnEquipoCapitan(ManagerRegistry $doctrine, $id): Response
+    {
+        $obj = new stdClass();
+        $entityManager = $doctrine->getManager();
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipoJugador = $doctrine->getRepository(EquipoJugador::class);
+
+        $id_equipo = $_POST['id_equipo'];
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        $id_jugador = $repositoryJugador->findOneBy(['email' => $email])->getId();
+        $id = $repositoryEquipoJugador->encontrarPorJE(strval($id_jugador), strval($id_equipo))[0]['id'];
+        $ej = $repositoryEquipoJugador->find($id);
+        $repositoryEquipoJugador->remove($ej, true);
+        $id_nuevo_capitan = $repositoryEquipo->obtenOtroCapitan(strval($id_jugador),strval($id_equipo))[0]['id'];
+        $equipo = $repositoryEquipo->find(strval($id_equipo));
+        $jugador = $repositoryJugador->find(strval($id_nuevo_capitan));
+        $equipo->setCapitan($jugador);
+        $repositoryEquipo->add($equipo,true);
+        $obj->mensaje = "Te has borrado del equipo actual y tu puesto de capitán se ha cedido a otra persona";
+        $obj->id_nuevo_capitan = $id_nuevo_capitan;
+        return new Response(json_encode($obj));
+        
+    }
 }

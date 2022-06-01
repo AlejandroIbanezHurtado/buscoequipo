@@ -72,6 +72,16 @@ class JugadorRepository extends ServiceEntityRepository implements PasswordUpgra
         return $equipos;
     }
 
+    public function obtenJugadorPorEmail($email)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from jugador where email='${email}'";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
     // /**
     //  * @return Jugador[] Returns an array of Jugador objects
     //  */

@@ -95,6 +95,16 @@ class EquipoRepository extends ServiceEntityRepository
         return $equipos;
     }
 
+    public function obtenOtroCapitan($id_capi_actual,$id_equipo)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select jugador.id from equipo inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id inner join jugador on equipo_jugador.jugador_id = jugador.id where equipo.id=${id_equipo} and jugador.id !=${id_capi_actual} order by rand() limit 1";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
     public function obtenEquiposPermaPaginados(int $pagina, int $filas, $perma=1)
     {
         $conn = $this->getEntityManager()->getConnection();
