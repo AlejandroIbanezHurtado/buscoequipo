@@ -89,6 +89,49 @@
             style="color:red;"
             {% endif %}
             >Pistas</a></li>
+            {% if app.user.email is defined %}
+                  <li>
+                    <div class="dropdown show">
+                        <a class="btn dropdown-toggle">
+                        {% if app.user.imagen != null %}
+                        <img src="bd/{{ asset(app.user.imagen) }}" width="50px"></img>
+                        {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="white" class="bi bi-person-circle" viewBox="0 0 16 16">
+                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                        {% endif %}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                          {% if app.user.roles[0]=="ROLE_ADMIN" %}
+                            <button class="dropdown-item" type="button"><a href="/admin" class="text-dark">Panel de administración</a></button>
+                          {% endif %}
+                          {# <button class="dropdown-item" type="button"><a href="/misreservas" class="text-dark">Panel</a></button> #}
+                          <div class="btn-group dropright">
+                            <button type="button" class="dropdown-item dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Panel de control
+                            </button>
+                            <div class="dropdown-menu">
+                              <button class="dropdown-item" type="button"><a href="/mis/equipos" class="text-dark">Mis equipos</a></button>
+                              <button class="dropdown-item" type="button"><a href="/mis/partidos" class="text-dark">Mis partidos</a></button>
+                              <button class="dropdown-item" type="button"><a href="/mis/torneos" class="text-dark">Mis torneos</a></button>
+                            </div>
+                          </div>
+                          <button class="dropdown-item" type="button"><a href="/perfil" class="text-dark">Editar perfil</a></button>
+                          <button class="dropdown-item" type="button"><a href="/logout" class="text-danger">Cerrar sesión</a></button>
+                        </div>
+                      </div>
+                  </li>
+                  {% else %}
+                  <li>
+                  <a href="login">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="white" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                      </svg>
+                  </a>
+                  </li>
+                  {% endif %}
           </ul>
         </div>
       </nav>
