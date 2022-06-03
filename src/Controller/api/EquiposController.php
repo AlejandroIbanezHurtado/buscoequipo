@@ -146,13 +146,24 @@ class EquiposController extends AbstractController
         $id = $repositoryEquipoJugador->encontrarPorJE(strval($id_jugador), strval($id_equipo))[0]['id'];
         $ej = $repositoryEquipoJugador->find($id);
         $repositoryEquipoJugador->remove($ej, true);
-        $id_nuevo_capitan = $repositoryEquipo->obtenOtroCapitan(strval($id_jugador),strval($id_equipo))[0]['id'];
-        $equipo = $repositoryEquipo->find(strval($id_equipo));
-        $jugador = $repositoryJugador->find(strval($id_nuevo_capitan));
-        $equipo->setCapitan($jugador);
-        $repositoryEquipo->add($equipo,true);
-        $obj->mensaje = "Te has borrado del equipo actual y tu puesto de capitán se ha cedido a otra persona";
-        $obj->id_nuevo_capitan = $id_nuevo_capitan;
+        $ids_juga = $repositoryEquipo->obtenOtroCapitan(strval($id_jugador),strval($id_equipo));
+        if(count($ids_juga)!=0)
+        {
+            $id_nuevo_capitan = $ids_juga[0]['id'];
+            $equipo = $repositoryEquipo->find(strval($id_equipo));
+            $jugador = $repositoryJugador->find(strval($id_nuevo_capitan));
+            $equipo->setCapitan($jugador);
+            $repositoryEquipo->add($equipo,true);
+            $obj->mensaje = "Te has borrado del equipo actual y tu puesto de capitán se ha cedido a otra persona";
+            $obj->id_nuevo_capitan = $id_nuevo_capitan;
+        }
+        else{
+            $equipo = $repositoryEquipo->find(strval($id_equipo));
+            $repositoryEquipo->remove($equipo,true);
+            $obj->mensaje = "El equipo se ha borrado ya que su capitán ha abandonado";
+            $obj->id_nuevo_capitan = null;
+        }
+        
         return new Response(json_encode($obj));
         
     }

@@ -30,13 +30,12 @@ $(function(){
                             id_equipo: id
                         },function(data){
                             data = JSON.parse(data);
+                            if(data.id_nuevo_capitan==null) window.location.href="/equipos";
                             $("#modalHora").find(".modal-body").children().remove();
                             $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
                             $("#modalHora").find(".modal-body").append("<p>"+data.mensaje+"</p>");
                             $("#modalHora").modal("show");
                             $("#contJugadores").find("[id_jugador='"+result2[0].id+"']").remove();
-                            // debugger
-                            // $("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").removeClass("alert-secondary").addClass("alert-info").text("Capitán - "+$("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").find("span").text());
                             $("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").addClass("alert-info");
                             nombre = $("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").find("span").text();
                             $("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").find("span").text("Capitán - "+nombre);
