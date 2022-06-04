@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sportz &mdash; Colorlib Sports Team Template</title>
+    <title>Busco Equipo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
     <link rel="stylesheet" href="{{ asset('fonts/icomoon/style.css')}}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}">
@@ -50,22 +51,22 @@
           {% endif %}
           >Inicio</a></li>
             <li class="has-children">
-              <a href="/equipos"
+              <a
               {% if app.request.pathinfo == "/equipos" %}
               style="color:red;"
               {% endif %}
               >Equipos</a>
               <ul class="dropdown arrow-top">
                 <li class="children">
-                  <a href="/crear/quipo">Crea un equipo</a>
+                  <a href="/crear/equipo">Crea un equipo</a>
                 </li>
                 <li class="children">
-                  <a href="/unir/equipo">Unirse a un equipo</a>
+                  <a href="/equipos">Unirse a un equipo</a>
                 </li>
               </ul>
             </li>
             <li class="has-children">
-              <a href="/partidos"
+              <a
               {% if app.request.pathinfo == "/partidos" %}
               style="color:red;"
               {% endif %}
@@ -75,7 +76,7 @@
                   <a href="/crear/partido">Crea un partido</a>
                 </li>
                 <li class="children">
-                  <a href="/unir/partido">Unirse a un partido</a>
+                  <a href="/partidos">Unirse a un partido</a>
                 </li>
               </ul>
             </li>

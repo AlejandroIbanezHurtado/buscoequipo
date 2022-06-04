@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\EquipoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EquipoRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=EquipoRepository::class)
@@ -20,6 +21,12 @@ class Equipo
     private $id;
 
     /**
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 20,
+     *      minMessage = "El nombre debe de tener como mínimo {{ limit }} caracteres",
+     *      maxMessage = "El nombre no debe de ser mayor a {{ limit }} caracteres"
+     * )
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $nombre;
@@ -38,7 +45,7 @@ class Equipo
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $escudo;
+    private $escudo="interrogacion.png";
 
     /**
      * @ORM\OneToMany(targetEntity=Partido::class, mappedBy="equipo1")

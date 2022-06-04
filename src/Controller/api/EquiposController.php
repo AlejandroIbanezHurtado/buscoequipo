@@ -10,6 +10,7 @@ use App\Entity\EquipoJugador;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -77,12 +78,14 @@ class EquiposController extends AbstractController
             $boolEquipo = $repositoryJugador->obtenJugadorEquipo($email);
             if(intval($equipo)>=12) 
             {
-                $respuesta = "Este equipo está lleno";
+                $obj->clave = false;
+                $obj->respuesta = "Este equipo está lleno";
             }
             else{
                 if(count($boolEquipo)!=0)
                 {
-                    $respuesta = "Ya perteneces a un equipo";
+                    $obj->clave = false;
+                    $obj->respuesta = "Ya perteneces a un equipo";
                 }
                 else{
                     $id_equipo = $_POST['id_equipo'];
@@ -95,18 +98,13 @@ class EquiposController extends AbstractController
                     $ej->setJugador($j);
                     $entityManager->persist($ej);
                     $entityManager->flush();
-                    $respuesta = "Te las unido al equipo ".$e->getNombre();
+                    $obj->clave = true;
+                    $obj->respuesta = "Te las unido al equipo ".$e->getNombre();
                 }
             }
-            return new Response($respuesta);
+            return new Response(json_encode($obj));
         }
     }
-
-
-
-
-
-
 
     /**
      * @Route("api/borraJugadorEnEquipo/{id}", name="borraJugadorEnEquipo")
@@ -166,5 +164,57 @@ class EquiposController extends AbstractController
         
         return new Response(json_encode($obj));
         
+    }
+
+    /**
+     * @Route("/api/creaEquipoPerma", name="creaEquipoPerma")
+     */
+    public function creaEquipoPerma(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
+    {
+        if(empty($_SESSION))
+        {
+            session_start();
+        }
+        $correo = $_SESSION['_sf2_attributes']['_security.last_username'];
+
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryEquipoJugador = $doctrine->getRepository(EquipoJugador::class);
+        $boolEquipo = $repositoryJugador->obtenJugadorEquipo($correo);
+        if(count($boolEquipo)!=0)
+        {
+            $respuesta = "Ya perteneces a un equipo";
+        }
+        else
+        {
+            $j = $repositoryJugador->findOneBy(array('email' => $correo));
+            $e = new Equipo();
+            $e->setNombre($_POST["nombre"]);
+            $e->setPermanente(true);
+            $e->setCapitan($j);
+    
+            if(isset($_FILES['file']))
+            {
+                $nombre = time().rand(1,99999).$_FILES['file']['name'];
+                move_uploaded_file($_FILES["file"]["tmp_name"], "bd/".$nombre);
+                $e->setEscudo($nombre);
+            }
+    
+            $ej = new EquipoJugador();
+            $ej->setEquipo($e);
+            $ej->setJugador($j);
+            $errores = $validator->validate($e);
+            if(count($errores)==0)
+            {
+                $repositoryEquipo->add($e,true);
+                $repositoryEquipoJugador->add($ej,true);
+            }
+            $array = [];
+            foreach ($errores as &$valor) {
+                $array[] = $valor->getMessage();
+            }
+            $respuesta=$array;
+        }
+        return new Response(json_encode($respuesta));
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\EquipoJugadorRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use App\Repository\EquipoJugadorRepository;
 
 /**
  * @ORM\Entity(repositoryClass=EquipoJugadorRepository::class)
@@ -19,13 +20,13 @@ class EquipoJugador
 
     /**
      * @ORM\ManyToOne(targetEntity=Equipo::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $equipo;
 
     /**
      * @ORM\ManyToOne(targetEntity=Jugador::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $jugador;
 

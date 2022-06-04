@@ -49,4 +49,15 @@ class EquipoController extends AbstractController
         if(count($boolEquipo)!=0) $respuesta = $this->render('equipo/equipolleno.html.twig', ['controller_name' => 'EquipoController', 'texto' => "Lo sentimos, ya perteneces a un equipo",]);
         return $respuesta;
     }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/crear/equipo", name="crearEquipoPerma")
+     */
+    public function crearEquipoPerma(ManagerRegistry $doctrine): Response
+    {
+        return $this->render('equipo/crearEquipo.html.twig', [
+            'controller_name' => 'EquipoController',
+        ]);
+    }
 }

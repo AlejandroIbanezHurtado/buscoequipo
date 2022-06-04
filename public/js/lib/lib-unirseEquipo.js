@@ -21,6 +21,7 @@ $(function(){
             }
             $("#boton").on("click",function(event){
                 event.preventDefault();
+                btn = $(this);
                 if($(this).attr("equipo")==="dentro")
                 {
                     if(result2[0].email==result.jugadores[0].email)
@@ -40,7 +41,7 @@ $(function(){
                             nombre = $("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").find("span").text();
                             $("#contJugadores").find("[id_jugador='"+data.id_nuevo_capitan+"']").find("span").text("Capitán - "+nombre);
                         })
-                        $(this).attr("equipo","fuera").attr("class","btn btn-success my-4").text("Unirse");
+                        btn.attr("equipo","fuera").attr("class","btn btn-success my-4").text("Unirse");
                     }
                     else
                     {
@@ -53,7 +54,7 @@ $(function(){
                             $("#modalHora").find(".modal-body").append("<p>"+data+"</p>");
                             $("#modalHora").modal("show");
                         })
-                        $(this).attr("equipo","fuera").attr("class","btn btn-success my-4").text("Unirse");
+                        btn.attr("equipo","fuera").attr("class","btn btn-success my-4").text("Unirse");
                         $("#contJugadores").find("[id_jugador='"+result2[0].id+"']").remove();
                     }
                     
@@ -64,17 +65,22 @@ $(function(){
                     {
                         id_equipo: id
                     },function(data){
+                        data = JSON.parse(data);
                         $("#modalHora").find(".modal-body").children().remove();
                         $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
-                        $("#modalHora").find(".modal-body").append("<p>"+data+"</p>");
+                        $("#modalHora").find(".modal-body").append("<p>"+data.respuesta+"</p>");
                         $("#modalHora").modal("show");
+                        if(data.clave==true)
+                        {
+                            if(result2[0].imagen==null) result2[0].imagen="user.png";
+                            elemento = $("<div id_jugador="+result2[0].id+" class='alert alert-secondary d-flex justify-content-between' role='alert'>\
+                            <span>"+result2[0].nombre+" "+result2[0].apellidos+"</span> <img src='/bd/"+result2[0].imagen+"' style='max-width: 50px;'</img>\
+                            </div>");
+                            contEquipos.append(elemento);
+                            btn.attr("equipo","dentro").attr("class","btn btn-danger my-4").text("Salir");
+                        }
                     })
-                    if(result2[0].imagen==null) result2[0].imagen="user.png";
-                    elemento = $("<div id_jugador="+result2[0].id+" class='alert alert-secondary d-flex justify-content-between' role='alert'>\
-                    <span>"+result2[0].nombre+" "+result2[0].apellidos+"</span> <img src='/bd/"+result2[0].imagen+"' style='max-width: 50px;'</img>\
-                    </div>");
-                    contEquipos.append(elemento);
-                    $(this).attr("equipo","dentro").attr("class","btn btn-danger my-4").text("Salir");
+                    
                 }
             })
         })

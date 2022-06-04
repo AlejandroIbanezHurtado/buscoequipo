@@ -20,7 +20,7 @@ $(function(){
     function pideProxPartido(){
         $.getJSON("/api/obtenProxPartidos",function(result){
             $(".loader").remove();
-            contProxPartido.append("<div class='h5 text-black text-uppercase text-center text-lg-left' id='proxPartido'><div class='d-block d-md-inline-block mb-3 mb-lg-0'><img src='' alt='Image' class='mr-3 image'><span class='d-block d-md-inline-block ml-0 ml-md-3 ml-lg-0'></span></div><span class='text-muted mx-3 text-normal mb-3 mb-lg-0 d-block d-md-inline '>vs</span> <div class='d-block d-md-inline-block'><img src='' alt='Image' class='mr-3 image'><span class='d-block d-md-inline-block ml-0 ml-md-3 ml-lg-0'></span></div></div>");
+            contProxPartido.append("<div class='h5 text-black text-uppercase text-center text-lg-left' id='proxPartido'><div class='d-block d-md-inline-block mb-3 mb-lg-0'><img src='' alt='No encontrado' class='mr-3 image'><span class='d-block d-md-inline-block ml-0 ml-md-3 ml-lg-0'></span></div><span class='text-muted mx-3 text-normal mb-3 mb-lg-0 d-block d-md-inline '>vs</span> <div class='d-block d-md-inline-block'><img src='' alt='No encontrado' class='mr-3 image'><span class='d-block d-md-inline-block ml-0 ml-md-3 ml-lg-0'></span></div></div>");
             var prox = $("#proxPartido");
             for(i=0;i<result.proxPartido.length+1;i=i+2)
             {
@@ -46,6 +46,7 @@ $(function(){
             for(i=0;i<result.datos_equipos.length;i++)
             {
                 contUltimoPartidoTorneo.children().find("img")[i].setAttribute("src","bd/"+result.datos_equipos[i].escudo);
+                contUltimoPartidoTorneo.children().find("img")[i].setAttribute("alt","No encontrado")
                 nombres[i].innerText=result.datos_equipos[i].nombre
             }
             datos_torneo = $(".datos_torneo");
@@ -68,7 +69,7 @@ $(function(){
                         <div class='text-center text-lg-left'>\
                         <div class='d-block d-lg-flex align-items-center'>\
                             <div class='image image-small text-center mb-3 mb-lg-0 mr-lg-3'>\
-                            <img src='bd/"+result.partidos[i].escudo+"' alt='Image' class='img-fluid'>\
+                            <img src='bd/"+result.partidos[i].escudo+"' alt='No encontrado' class='img-fluid'>\
                             </div>\
                             <div class='text'>\
                             <h3 class='h5 mb-0 text-black'>"+result.partidos[i].nombre+"</h3>\
@@ -85,7 +86,7 @@ $(function(){
                         <div class=''>\
                         <div class='d-block d-lg-flex align-items-center'>\
                             <div class='image image-small ml-lg-3 mb-3 mb-lg-0 order-2'>\
-                            <img src='bd/"+result.partidos[i+1].escudo+"' alt='Image' class='img-fluid'>\
+                            <img src='bd/"+result.partidos[i+1].escudo+"' alt='No encontrado' class='img-fluid'>\
                             </div>\
                             <div class='text order-1 w-100'>\
                             <h3 class='h5 mb-0 text-black'></h3>\
