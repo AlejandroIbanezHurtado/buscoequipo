@@ -22,7 +22,6 @@ $(function(){
     });
 
     guardar.on("click",function(){
-        console.log(validator)
         spinner = $("<div class='loader'></div>");
         if(validator.errorList.length==0 && $("#inputNombre").attr("value")!="")
         {
@@ -37,9 +36,13 @@ $(function(){
                 data: formData,
                 contentType: false,
                 processData: false,
-                complete: function(data){
-                    console.log(data);
-                    window.location.href="/mis/equipos";
+                success: function(text){
+                    text = JSON.parse(text);
+                    $("#modalHora").find(".modal-body").children().remove();
+                    $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+                    $("#modalHora").find(".modal-body").append("<p>"+text+"</p>");
+                    $("#modalHora").modal("show");
+                    if(text=="EL EQUIPO SE HA CREADO CORRECTAMENTE") window.setInterval(window.location.href="/mis/equipos", 2500);
                 }
             });
         }

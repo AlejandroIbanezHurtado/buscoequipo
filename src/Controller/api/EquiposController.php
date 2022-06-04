@@ -214,6 +214,7 @@ class EquiposController extends AbstractController
                 $array[] = $valor->getMessage();
             }
             $respuesta=$array;
+            if(count($array)==0) $respuesta="EL EQUIPO SE HA CREADO CORRECTAMENTE";
         }
         return new Response(json_encode($respuesta));
     }
