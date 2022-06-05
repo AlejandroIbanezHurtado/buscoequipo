@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+{% block styles %}
+  <link rel="stylesheet" href="{{ asset('css/lib/spinner.css')}}">
+  <link rel="stylesheet" href="{{ asset('css/lib/lib-foto.css')}}">
+{% endblock %}
+{% block body %}
+    <div class="px-4 bg-negro">
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-xl-4 col-md-4 col-lg-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Foto de perfil</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+
+                    <img class="rounded mb-2" id="imagen" src={% if app.user.imagen != null %} "bd/{{ app.user.imagen }}" {% else %} "bd/interrogacion.png" {% endif %} width="150px">    
+                    <!-- Profile picture upload button-->
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="file" class="bg-danger text-light rounded p-3" id="archivo">
+                                Subir imagen
+                            </label>
+                            <input id="file" type="file" onchange="previewFile();" accept="image/png, image/gif, image/jpeg" name="imagen"/>
+                        </div>
+                        <div class="col-md-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" id="eliminarFoto">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                        </svg>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8 col-md-8 col-lg-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Datos de tu cuenta</div>
+                <div class="card-body">
+                    <form id="formulario" class="needs-validation" novalidate>
+                        <!-- Form Group (email)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Correo</label>
+                            <input class="form-control" id="inputEmailAddress" readonly type="email" value="{{app.user}}" name="correo">
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputNombre">Nombre</label>
+                                <input class="form-control" id="inputNombre" type="text" placeholder="Introduce tu nombre" value="{{app.user.nombre}}" name="nombre" required>
+                                <div class="valid-feedback">Correcto!</div>
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputApellidos">Apellidos</label>
+                                <input class="form-control" id="inputApellidos" type="text" placeholder="Introduce tus apellidos" value="{{app.user.apellidos}}" name="apellidos" required>
+                                <div class="valid-feedback">Correcto!</div>
+                            </div>
+                        </div>
+                        <!-- Save changes button-->
+                        <div class="row" id="final">
+                        <div class="col-md-6">
+                            <button class="btn btn-danger" type="button" id="botonGuardar">Guardar cambios</button>
+                        </div>
+                        <div class="col-md-6" id="carga"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ asset('js/lib/lib-editarUsuario.js') }}"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+{% endblock %}

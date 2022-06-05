@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PrincipalController extends AbstractController
 {
@@ -64,6 +65,17 @@ class PrincipalController extends AbstractController
     public function base(): Response
     {
         return $this->render('base.html.twig', [
+            'controller_name' => 'PrincipalController',
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/perfil", name="perfil")
+     */
+    public function perfil(): Response
+    {
+        return $this->render('editar-perfil.html.twig', [
             'controller_name' => 'PrincipalController',
         ]);
     }

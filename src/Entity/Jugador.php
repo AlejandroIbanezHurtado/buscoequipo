@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\JugadorRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,6 +23,8 @@ class Jugador implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
+     * @Assert\Email(
+     *     message = "El email '{{ value }}' es inválido.")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -38,11 +41,23 @@ class Jugador implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 30,
+     *      minMessage = "El nombre debe de tener como mínimo {{ limit }} caracteres",
+     *      maxMessage = "El nombre no debe de ser mayor a {{ limit }} caracteres"
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $nombre;
 
     /**
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 70,
+     *      minMessage = "Los apellidos deben de tener como mínimo {{ limit }} caracteres",
+     *      maxMessage = "Los apellidos no deben de ser mayor a {{ limit }} caracteres"
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $apellidos;

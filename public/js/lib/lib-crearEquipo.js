@@ -10,13 +10,13 @@ $(function(){
         rules: {
           nombre: {
             required: true,
-            rangelength: [6, 20]
+            rangelength: [4, 25]
           }
         },
         messages: {
             nombre: {
                 required: "Escribe un nombre",
-                rangelength: "El nombre debe de tener entre 6 y 20 caracteres"
+                rangelength: "El nombre debe de tener entre 4 y 25 caracteres"
             }
         }
     });
