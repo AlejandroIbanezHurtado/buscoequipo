@@ -2,11 +2,12 @@
 
 namespace App\Repository;
 
+use stdClass;
 use App\Entity\Partido;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Partido|null find($id, $lockMode = null, $lockVersion = null)
@@ -111,6 +112,48 @@ class PartidoRepository extends ServiceEntityRepository
         $resultSet = $stmt->executeQuery();
         $partido = $resultSet->fetchAll();
         return $partido;
+    }
+
+    public function obtenPartidosPaginados(int $pagina=1, int $filas=5, int $perma=1, string $order="asc")
+    {
+        $obj = new stdClass();
+        $filas = $filas*2;
+        $conn = $this->getEntityManager()->getConnection();
+
+        $registros = array();
+        $sql = "select distinct id_partido_id as partido_id, id_equipo_id as equipo_id, equipo.nombre, equipo.escudo, goles, (select fecha_ini from partido where partido.id = id_partido_id) as fecha
+        from equipo inner join partido_equipo on partido_equipo.id_equipo_id=equipo.id 
+        left join (select P.partido_id, P.equipo_id, P.nombre, P.escudo, count(*) as 'goles' 
+        from (select detalle_partido.partido_id, detalle_partido.equipo_id, equipo.nombre, equipo.escudo, Par.fecha_ini, detalle_partido.gol 
+        from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id 
+        inner join (select * from partido order by fecha_ini desc) as Par on detalle_partido.partido_id = Par.id where gol=1) as P 
+        group by P.partido_id, P.equipo_id order by P.partido_id) as h 
+        on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id where equipo.permanente=${perma} order by fecha ${order}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $registros = $resultSet->fetchAll();
+        $obj->n_total = $n_total = count($registros);
+
+        $total = count($registros);
+        $paginas = ceil($total /$filas);
+        $registros = array();
+        if ($pagina <= $paginas)
+        {
+            $inicio = ($pagina-1) * $filas;
+            $sql = "select distinct id_partido_id as partido_id, id_equipo_id as equipo_id, equipo.nombre, equipo.escudo, goles, (select fecha_ini from partido where partido.id = id_partido_id) as fecha
+            from equipo inner join partido_equipo on partido_equipo.id_equipo_id=equipo.id 
+            left join (select P.partido_id, P.equipo_id, P.nombre, P.escudo, count(*) as 'goles' 
+            from (select detalle_partido.partido_id, detalle_partido.equipo_id, equipo.nombre, equipo.escudo, Par.fecha_ini, detalle_partido.gol 
+            from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id 
+            inner join (select * from partido order by fecha_ini desc) as Par on detalle_partido.partido_id = Par.id where gol=1) as P 
+            group by P.partido_id, P.equipo_id order by P.partido_id) as h 
+            on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id where equipo.permanente=${perma} order by fecha ${order} limit $inicio, $filas";
+            $stmt = $conn->prepare($sql);
+            $resultSet = $stmt->executeQuery();
+            $registros = $resultSet->fetchAll(); 
+        }
+        $obj->registros=$registros;
+        return $obj;
     }
 
 

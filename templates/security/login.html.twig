@@ -36,8 +36,11 @@
         {% if error %}
             <div class="alert alert-danger mb-4 mt-4">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-        <div>
+        <div class="my-4">
             <a href="/reset-password" class="text-center">¿Has olvidado la contraseña?</a>
+        </div>
+        <div>
+            <a href="/register" class="text-center">No estoy registrado</a>
         </div>
         <button class="btn btn-primary mt-4 mb-4" type="submit">
             Iniciar sesión

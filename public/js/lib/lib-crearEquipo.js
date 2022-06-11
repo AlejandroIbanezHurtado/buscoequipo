@@ -22,7 +22,7 @@ $(function(){
     });
 
     guardar.on("click",function(){
-        spinner = $("<div class='loader'></div>");
+        spinner = $("<div class='loader' id='cargando'></div>");
         if(validator.errorList.length==0 && $("#inputNombre").attr("value")!="")
         {
             $("#carga").append(spinner);
@@ -38,6 +38,7 @@ $(function(){
                 processData: false,
                 success: function(text){
                     text = JSON.parse(text);
+                    $("div").remove("#cargando");
                     $("#modalHora").find(".modal-body").children().remove();
                     $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
                     $("#modalHora").find(".modal-body").append("<p>"+text+"</p>");
@@ -46,7 +47,6 @@ $(function(){
                 }
             });
         }
-        // spinner = $("<div>").addClass("spinner-border text-danger").attr("id","cargando").attr("role","status").append($("span").addClass("sr-only").text("Loading..."));
     })
 })
 function previewFile(input){
