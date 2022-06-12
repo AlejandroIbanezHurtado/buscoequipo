@@ -2,6 +2,8 @@ $(function(){
     var contProxPartido = $("#contProxPartido");
     var contPartidos = $("#contPartidos");
     var paginador = $("#paginador");
+    const fecha_actual = new Date();
+    const perma = parseInt(contPartidos.attr("perma"));
     
     setInterval(function(){
         var hora = $("#horas")
@@ -52,7 +54,9 @@ $(function(){
             j=0;
             for(i=0;i<result.partidos.length-1;i=i+2)
             {
-                // debugger
+                jugado="";
+                fecha_ini = new Date(result.partidos[i].fecha)
+                if(fecha_actual<fecha_ini) jugado = "<div><small class='text-danger'>Por jugar</small></div>";
                 partido = $("<div class='row bg-white align-items-center ml-0 mr-0 py-4 match-entry' partido_id="+result.partidos[i].partido_id+">\
                 <div class='col-md-4 col-lg-4 mb-4 mb-lg-0'>\
                     <div class='text-center text-lg-left'>\
@@ -66,8 +70,9 @@ $(function(){
                     </div>\
                     </div>\
                 </div>\
-                <div class='col-md-4 col-lg-4 text-center mb-4 mb-lg-0'>\
-                    <div class='d-inline-block'>\
+                <div class='col-md-4 col-lg-4 text-center mb-4 mb-lg-0'>"+
+                    jugado+
+                    "<div class='d-inline-block'>\
                     <div class='bg-black py-2 px-4 mb-2 text-white d-inline-block rounded'><span class='h5'>"+result.partidos[i].goles+":"+result.partidos[i+1].goles+"</span></div>\
                     </div>\
                     <div><small>"+result.partidos[j].fecha+"</small></div>\
@@ -87,7 +92,9 @@ $(function(){
                 </div>\
                 </div>");
                 partido.on("click",function(){
-                    window.location.href="/partido/permanente/"+$(this).attr("partido_id")
+                    tipo="permanente"
+                    if(parseInt(contPartidos.attr("perma"))==0) tipo="temporal"
+                    window.location.href="/partido/"+tipo+"/"+$(this).attr("partido_id")
                 })
                 contPartidos.append(partido);
                 j=j+2;
@@ -121,13 +128,13 @@ $(function(){
         })  
     }
 
-    rellenaEquipos(1,3,1,"asc");
-    paginacion(1,3,1,"asc");
+    rellenaEquipos(1,3,perma,"asc");
+    paginacion(1,3,perma,"asc");
 
     $("select").on("change",function(){
         orden = $("select").val();
-        rellenaEquipos(1,3,1,orden);
-        paginacion(1,3,1,orden);
+        rellenaEquipos(1,3,perma,orden);
+        paginacion(1,3,perma,orden);
     })
         
 })

@@ -18,8 +18,9 @@ class PartidoController extends AbstractController
     public function partidosPermanentes(ManagerRegistry $doctrine): Response
     {
         // $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
-        return $this->render('partido/permanentes.html.twig', [
+        return $this->render('partido/listado.html.twig', [
             'controller_name' => 'PartidoController',
+            'perma' => 1,
         ]); 
     }
 
@@ -29,8 +30,9 @@ class PartidoController extends AbstractController
     public function partidosTemporales(ManagerRegistry $doctrine): Response
     {
         // $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
-        return $this->render('partido/temporales.html.twig', [
+        return $this->render('partido/listado.html.twig', [
             'controller_name' => 'PartidoController',
+            'perma' => 0,
         ]); 
     }
 }
