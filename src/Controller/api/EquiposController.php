@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class EquiposController extends AbstractController
 {
     /**
-     * @Route("api/obtenEquiposPermaPaginados/{pagina}/{filas}/{perma}", name="obtenEquiposPermaPaginados")
+     * @Route("api/obtenEquiposPermaPaginados/{pagina}/{filas}/{perma}", name="obtenEquiposPermaPaginadoss")
      */
     public function obtenEquiposPermaPaginados(ManagerRegistry $doctrine, int $pagina=1, int $filas=12, int $perma=1): Response
     {

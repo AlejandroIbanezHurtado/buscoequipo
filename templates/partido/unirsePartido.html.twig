@@ -1,0 +1,52 @@
+{% extends "base.html.twig "%}
+{% block scripts %}
+  <script src="{{ asset('js/lib/lib-partidoPerma.js')}}"></script>
+{% endblock %}
+{% block body %}
+<style>
+
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4 text-center" id="contEquipo1">
+      <h1 class="m-5" style="word-wrap: break-word;">Por definir</h1>
+      <img src="/bd/interrogacion.png" class="m-5" style="max-width: 200px;"></img>
+      <div>
+        
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="m-5 text-center" style="word-wrap: break-word;" id="contPista">
+        <h1 class="bg-warning my-4 border border-dark rounded text-center d-none"></h1>
+        <div class="text-center"></div>
+        <small class="text-center"></small>
+        <img src="" class="m-5" style="max-width: 200px;"></img>
+      </div>
+    </div>
+    
+    <div class="col-4 text-center" id="contEquipo2">
+      <h1 class="m-5" style="word-wrap: break-word;">Por definir</h1>
+      <img src="/bd/interrogacion.png" class="m-5" style="max-width: 200px;"></img>
+      <div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="row justify-content-center">
+  <form action="" class="justify-content-center my-4">
+    <button class="btn btn-success my-4 d-none" id="boton" equipo="fuera">Unirse</button>
+  </form>
+  </div>
+</div>
+
+<div class="modal fade" id="modalHora" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

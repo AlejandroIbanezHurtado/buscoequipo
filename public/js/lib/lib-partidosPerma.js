@@ -49,7 +49,6 @@ $(function(){
             paginador.attr("pag",pagina);
             paginador.attr("total",result.total/2);
             equipos  = result
-            console.log(result)
             for(i=0;i<result.partidos.length;i++) if(result.partidos[i].goles==null) result.partidos[i].goles=0;
             j=0;
             for(i=0;i<result.partidos.length-1;i=i+2)

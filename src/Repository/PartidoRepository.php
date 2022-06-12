@@ -104,10 +104,47 @@ class PartidoRepository extends ServiceEntityRepository
     }
 
     
-    public function obtenEquipoTempoEntreFecha($id_partido, $fecha_ini, $fecha_fin)
+    public function obtenEquipoEntreFecha($id_jugador, $fecha_ini, $fecha_fin)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select * from partido WHERE NOT ((date_add('${fecha_ini}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin) OR (date_sub('${fecha_fin}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin)) and id = ${id_partido}";
+        $sql = "select * from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id WHERE ((date_add(${fecha_ini}, INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin) OR (date_sub(${fecha_fin}, INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin)) and equipo_jugador.jugador_id = ${id_jugador} and equipo.permanente=${perma}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partido = $resultSet->fetchAll();
+        return $partido;
+    }
+
+    public function obtenPartido($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select partido.*,partido_equipo.*,equipo.*,pista.nombre as nombre_pista, pista.imagen from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on partido_equipo.id_equipo_id = equipo.id inner join pista on partido.pista_id = pista.id where partido.id = ${id}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partido = $resultSet->fetchAll();
+        return $partido;
+    }
+
+    public function obtenResultados($id_partido)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select distinct id_partido_id as partido_id, id_equipo_id as equipo_id, equipo.nombre, equipo.escudo, goles, (select fecha_ini from partido where partido.id = id_partido_id) as fecha
+        from equipo inner join partido_equipo on partido_equipo.id_equipo_id=equipo.id 
+        left join (select P.partido_id, P.equipo_id, P.nombre, P.escudo, count(*) as 'goles' 
+        from (select detalle_partido.partido_id, detalle_partido.equipo_id, equipo.nombre, equipo.escudo, Par.fecha_ini, detalle_partido.gol 
+        from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id 
+        inner join (select * from partido order by fecha_ini desc) as Par on detalle_partido.partido_id = Par.id where gol=1) as P 
+        group by P.partido_id, P.equipo_id order by P.partido_id) as h 
+        on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id where partido_id=${id_partido}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partido = $resultSet->fetchAll();
+        return $partido;
+    }
+
+    public function obtenDetalle($id_partido)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from detalle_partido inner join jugador on detalle_partido.jugador_id = jugador.id where detalle_partido.partido_id = ${id_partido} order by minuto";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $partido = $resultSet->fetchAll();
