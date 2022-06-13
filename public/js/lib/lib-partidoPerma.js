@@ -31,10 +31,10 @@ $(function(){
           </div>"))
         }
         for(i=0;i<result.jugadores1.length;i++) if(result.jugadores1[i].imagen==null) result.jugadores1[i].imagen="user.png";
-        for(i=0;i<result.jugadores2.length;i++) if(result.jugadores2[i].imagen==null) result.jugadores2[i].imagen="user.png";
         rellenaJugador(contEquipo1, result.jugadores1);
         if(typeof result.jugadores2 != "undefined") 
         {
+            for(i=0;i<result.jugadores2.length;i++) if(result.jugadores2[i].imagen==null) result.jugadores2[i].imagen="user.png";
             rellenaJugador(contEquipo2, result.jugadores2);
         }
         if(typeof result.detalles != "undefined")
