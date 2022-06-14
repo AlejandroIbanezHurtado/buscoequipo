@@ -26,9 +26,23 @@ $(function(){
         $(contPista.children()[3]).attr("src","/bd/"+result.partido[0].imagen)
         if(result.partido.length<2)
         {
-            contEquipo2.append($("<div class='text-center'>\
-            <button type='button' class='btn btn-success'>Unirse</button>\
-          </div>"))
+            if(result2.permanente==false)
+            {
+                boton = $("<div class='text-center'>\
+                <button type='button' id='btnUnirseTemporal' class='btn btn-success'>Unirse</button>\
+                </div>")
+                boton.on("click",unirseTemporal)
+                contPista.append(boton)
+            }
+            if(result2.permanente==true)
+            {
+                boton = $("<div class='text-center'>\
+                <button type='button' id='btnUnirsePermanente' class='btn btn-success'>Unirse</button>\
+                </div>")
+                boton.on("click",unirsePermanente)
+                contPista.append(boton)
+            }
+            
         }
         for(i=0;i<result.jugadores1.length;i++) if(result.jugadores1[i].imagen==null) result.jugadores1[i].imagen="user.png";
         rellenaJugador(contEquipo1, result.jugadores1);
@@ -72,14 +86,41 @@ $(function(){
         }
     }
 
-    function unirse(){
-        $.getJSON("/api/unirsePartidoPerma"+id,function(result){
-            a = result;
+    function unirsePermanente(){
+        $.getJSON("/api/unirsePartidoPerma/"+id,function(result){
+            console.log(result);
+            if(result.clave==true)
+            {
+                if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
+                $(contEquipo2.children()[0]).text(result.equipo.nombre);
+                $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
+                rellenaJugador(contEquipo2,result.equipo.jugadores);
+                $("#btnUnirsePermanente").remove();
+                $("#modalHora").find(".modal-body").children().remove();
+                $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+                $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
+                $("#modalHora").modal("show");
+            }
         })
+        
     }
 
-    // function mostrarResultados(resultados){
-    //     for(i=0;i<resultados.length;i++)
-    // }
+    function unirseTemporal(){
+        $.getJSON("/api/unirsePartidoTempo/"+id,function(result){
+            console.log(result);
+            if(result.clave==true)
+            {
+                if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
+                $(contEquipo2.children()[0]).text(result.equipo.nombre);
+                $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
+                rellenaJugador(contEquipo2,result.equipo.jugadores);
+                $("#btnUnirsePermanente").remove();
+                $("#modalHora").find(".modal-body").children().remove();
+                $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+                $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
+                $("#modalHora").modal("show");
+            }
+        })
+    }
     
 })

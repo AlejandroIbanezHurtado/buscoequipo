@@ -41,6 +41,7 @@ $(function(){
         })
     }
 
+    /*Esta función recoge el resultado de un JSON, con ese resultado rellena los partidos.No devuelve nada*/
     function rellenaEquipos(pagina=1, fila=5, perma=1, orden="asc"){
         contPartidos.empty();
         contPartidos.append("<div class='loader'></div>")
@@ -53,7 +54,7 @@ $(function(){
             for(i=0;i<result.partidos.length;i++) if(result.partidos[i].goles==null) result.partidos[i].goles=0;
             
 
-            //vemos los partidos a la espera
+            //obtenemos los id de los partidos que no se repiten dos veces(partidos a la espera)
             ids_partidos = [];
             for(i=0;i<result.partidos.length;i++) ids_partidos.push(result.partidos[i].partido_id);
             tempArray = ids_partidos.sort();
@@ -68,44 +69,39 @@ $(function(){
             })
             diferencia = uniqueArray.filter(x => !duplicados.includes(x));
             
-            // console.log(JSON.stringify(result.partidos[0]))
+            //recorremos y partimos el array en dos para insertar un equipo vacío(a la espera)
+            console.log("Buenos")
+            console.log(result.partidos)
             if(diferencia.length>0)
             {
                 parts = result.partidos;
                 parts1=null;
                 parts2=null;
-                nuevo=null;
-                for(i=0;i<parts.length;i++)
-                {
+                nuevo=parts;
+                
                     for(w=0;w<diferencia.length;w++)
                     {
-                        if(diferencia[w]==parts[i].partido_id)
+                        for(i=0;i<parts.length;i++)
                         {
-                            ejemplo = {"partido_id":parts[i].partido_id,"equipo_id":null,"nombre":"A la espera","escudo":"interrogacion.png","goles":"0","fecha":parts[i].fecha};
-                            parts1 = parts.slice(0,i+1);
-                            parts2 = parts.slice(i+1,parts.length);
-                            parts1.push(ejemplo)
+                            // debugger
+                            if(diferencia[w]==nuevo[i].partido_id)
+                            {
+                                ejemplo = {"partido_id":nuevo[i].partido_id,"equipo_id":null,"nombre":"A la espera","escudo":"interrogacion.png","goles":"0","fecha":nuevo[i].fecha};
+                                parts1 = nuevo.slice(0,i+1);
+                                parts2 = nuevo.slice(i+1,nuevo.length);
+                                parts1.push(ejemplo)
+                                nuevo = parts1;
+                                for(q=0;q<parts2.length;q++) nuevo.push(parts2[q]);
+                                i=parts.length;
+                            }
                         }
                     }
-                }
-                nuevo = parts1;
-                for(i=0;i<parts2.length;i++) nuevo.push(parts2[i]);
                 result.partidos=nuevo;
             }
             
             j=0;
             for(i=0;i<result.partidos.length-1;i=i+2)
             {
-                // for(w=0;w<diferencia.length;w++)
-                // {
-                //     j=0;
-                //     if(diferencia[w]==result.partidos[i].partido_id)
-                //     {
-                //         result.partidos[i+1].goles="0";
-                //         result.partidos[i+1].escudo="interrogacion.png";
-                //         result.partidos[i+1].nombre="A la espera";
-                //     }
-                // }
                 jugado="";
                 fecha_ini = new Date(result.partidos[i].fecha)
                 if(fecha_actual<fecha_ini) jugado = "<div><small class='text-danger'>Por jugar</small></div>";

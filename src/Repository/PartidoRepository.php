@@ -104,10 +104,10 @@ class PartidoRepository extends ServiceEntityRepository
     }
 
     
-    public function obtenEquipoEntreFecha($id_jugador, $fecha_ini, $fecha_fin)
+    public function obtenEquipoEntreFecha($id_jugador, $fecha_ini, $fecha_fin, $perma)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select * from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id WHERE ((date_add(${fecha_ini}, INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin) OR (date_sub(${fecha_fin}, INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin)) and equipo_jugador.jugador_id = ${id_jugador} and equipo.permanente=${perma}";
+        $sql = "select * from partido inner join partido_equipo on partido.id = partido_equipo.id_partido_id inner join equipo on equipo.id = partido_equipo.id_equipo_id inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id WHERE ((date_add('${fecha_ini}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin) OR (date_sub('${fecha_fin}', INTERVAL 1 MICROSECOND) BETWEEN fecha_ini AND fecha_fin)) and equipo_jugador.jugador_id = ${id_jugador}";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $partido = $resultSet->fetchAll();
