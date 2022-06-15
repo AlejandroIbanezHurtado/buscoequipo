@@ -45,6 +45,18 @@ class PartidoEquipoRepository extends ServiceEntityRepository
         }
     }
 
+    public function mirarSiCapiEstaEnPartido($email, $id_partido)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from partido_equipo inner join equipo on partido_equipo.id_equipo_id = equipo.id inner join jugador on equipo.capitan_id = jugador.id where partido_equipo.id_partido_id = ${id_partido} and jugador.email = '${email}'";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
+
+
     // /**
     //  * @return PartidoEquipo[] Returns an array of PartidoEquipo objects
     //  */

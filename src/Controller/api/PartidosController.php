@@ -114,6 +114,11 @@ class PartidosController extends AbstractController
      */
     public function unirsePartidoTempo(ManagerRegistry $doctrine, $id): Response
     {
+        //primero miramos en partido_equipo si este partido tiene dos equipos
+        //miramos fecha
+            //si tiene un equipo
+                //  tendremos que mostrar un modal de creacion rapida(escudo y nombre), se asigna capitan automaticamente
+            //si tiene dos equipos, nos unimos directamente
         $entityManager = $doctrine->getManager();
         if(!isset($_SESSION)) session_start();
         $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
@@ -155,5 +160,62 @@ class PartidosController extends AbstractController
         }
 
         return new Response(json_encode($obj));
+    }
+
+    /**
+     * @Route("/api/borraDePartido/{id}", name="borraDePartido")
+     */
+    public function borraDePartido(ManagerRegistry $doctrine, $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+        if(!isset($_SESSION)) session_start();
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        $obj = new stdClass();
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryPartidoEquipo = $doctrine->getRepository(PartidoEquipo::class);
+
+        $j = $repositoryJugador->findOneBy(['email' => $email])->getId();
+        $capitan = $repositoryEquipo->findOneBy(['capitan' => $j, 'permanente' => 1]);
+        $equipo =$repositoryEquipo->findOneBy(['id' => $capitan->getId()]);
+        $p = $repositoryPartido->findOneBy(['id' => $id]);
+        $ocupado = $repositoryPartido->obtenEquipoEntreFecha($j, date_format($p->getFechaIni(),'Y-m-d H:i:s'), date_format($p->getFechaFin(),'Y-m-d H:i:s'),1);
+        $obj->clave=false;
+        if(!empty($capitan)) //esta asociado a un equipo como capitan
+        {
+            $pe = $repositoryPartidoEquipo->findOneBy(['id_equipo' => $equipo->getId(), 'id_partido' => $p->getId()]);
+            // $pe->setIdEquipo($equipo);
+            // $pe->setIdPartido($p);
+            $entityManager->remove($pe);
+            $entityManager->flush();
+            $obj->clave=true;
+            $obj->perma=$equipo->getPermanente();
+            $obj->respuesta="Te has borrado del partido";
+        }
+        else{
+            $obj->respuesta="Debes de ser el capitán de un equipo para borrarte del partido";
+        }
+
+        return new Response(json_encode($obj));
+    }
+
+    /**
+     * @Route("/api/mirarSiCapiEstaEnPartido/{id}", name="mirarSiCapiEstaEnPartido")
+     */
+    public function mirarSiCapiEstaEnPartido(ManagerRegistry $doctrine, $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+        if(!isset($_SESSION)) session_start();
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        $obj = new stdClass();
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryPartidoEquipo = $doctrine->getRepository(PartidoEquipo::class);
+
+        $existe = !empty($repositoryPartidoEquipo->mirarSiCapiEstaEnPartido($email,$id));
+
+        return new Response(json_encode($existe));
     }
 }

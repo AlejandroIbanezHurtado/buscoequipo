@@ -7,7 +7,6 @@ $(function(){
 
     $.getJSON("/api/obtenPartido/"+id,function(result){
         result2 = JSON.parse(JSON.stringify(result));
-        console.log(result2);
         for(i=0;i<result.partido.length;i++)
         {
             $($("#contEquipo"+(i+1)).children()[0]).text(result.partido[i].nombre)
@@ -24,6 +23,9 @@ $(function(){
         $(contPista.children()[1]).text(result.partido[0].nombre_pista)
         $(contPista.children()[2]).text(result.partido[0].fecha_ini)
         $(contPista.children()[3]).attr("src","/bd/"+result.partido[0].imagen)
+
+        if(result2.permanente==true) mostrarBorrarPermanente();
+        
         if(result.partido.length<2)
         {
             if(result2.permanente==false)
@@ -55,7 +57,6 @@ $(function(){
         {
             for(i=0;i<result2.detalles.length;i++)
             {
-                // console.log(result2.detalles[i])
                 gol="";
                 amarilla="";
                 roja="";
@@ -88,9 +89,9 @@ $(function(){
 
     function unirsePermanente(){
         $.getJSON("/api/unirsePartidoPerma/"+id,function(result){
-            console.log(result);
             if(result.clave==true)
             {
+                $("button").remove();
                 if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
                 $(contEquipo2.children()[0]).text(result.equipo.nombre);
                 $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
@@ -100,6 +101,13 @@ $(function(){
                 $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
                 $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
                 $("#modalHora").modal("show");
+                boton = $("<div class='text-center'>\
+                <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
+                </div>")
+                boton.on("click",function(){
+                    salirPartido()
+                })
+                contPista.append(boton)
             }
         })
         
@@ -110,6 +118,7 @@ $(function(){
             console.log(result);
             if(result.clave==true)
             {
+                $("button").remove();
                 if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
                 $(contEquipo2.children()[0]).text(result.equipo.nombre);
                 $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
@@ -119,8 +128,76 @@ $(function(){
                 $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
                 $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
                 $("#modalHora").modal("show");
+                boton = $("<div class='text-center'>\
+                <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
+                </div>")
+                boton.on("click",function(){
+                    salirPartido()
+                })
+                contPista.append(boton)
             }
         })
     }
+
+    function salirPartido(){
+        $.getJSON("/api/borraDePartido/"+id,function(result){
+            console.log(result)
+            if(result.clave==true)
+            {
+                $("button").remove();
+                $("#btnUnirsePermanente").remove();
+                $("#modalHora").find(".modal-body").children().remove();
+                $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+                $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
+                $("#modalHora").modal("show");
+                if(result.perma==true)
+                {
+                    boton = $("<div class='text-center'>\
+                    <button type='button' id='btnUnirsePermanente' class='btn btn-success'>Unirse</button>\
+                    </div>")
+                    boton.on("click",unirsePermanente)
+                    contPista.append(boton)
+                }
+                else{
+                    boton = $("<div class='text-center'>\
+                    <button type='button' id='btnUnirseTemporal' class='btn btn-success'>Unirse</button>\
+                    </div>")
+                    boton.on("click",unirseTemporal)
+                    contPista.append(boton)
+                }
+                $(contEquipo2.children()[0]).text("A la espera");
+                $(contEquipo2.children()[1]).attr("src","/bd/interrogacion.png");
+                contEquipo2.find(".alert").remove();
+            }
+            
+        })
+        
+    }
+
+    function mostrarBorrarPermanente(){
+        $.getJSON("/api/mirarSiCapiEstaEnPartido/"+id,function(result){
+            if(result==true) 
+            {
+                $("button").remove();
+                boton = $("<div class='text-center'>\
+                <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
+                </div>")
+                boton.on("click",function(){
+                    salirPartido()
+                })
+                contPista.append(boton);
+            }
+            
+        })
+    }
     
+    $("#btnUnirseTemporal").on("click",function(){
+        unirseTemporal()
+    });
+    $("#btnUnirsePermanente").on("click",function(){
+        unirsePermanente()
+    });
+    $("#btnSalir").on("click",function(){
+        salirPartido()
+    })
 })
