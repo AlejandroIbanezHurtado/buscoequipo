@@ -5,6 +5,28 @@ $(function(){
     var arrayid = window.location.href.split("/");
     var id = arrayid[arrayid.length-1];
 
+    var guardar = $("#botonGuardar");
+    var nombre = $("#inputNombre");
+
+    jQuery.validator.setDefaults({
+        debug: true,
+        success: "¡Correcto!"
+    });
+    var validator = $( "#formulario" ).validate({
+        rules: {
+          nombre: {
+            required: true,
+            rangelength: [4, 25]
+          }
+        },
+        messages: {
+            nombre: {
+                required: "Escribe un nombre",
+                rangelength: "El nombre debe de tener entre 4 y 25 caracteres"
+            }
+        }
+    });
+
     $.getJSON("/api/obtenPartido/"+id,function(result){
         result2 = JSON.parse(JSON.stringify(result));
         for(i=0;i<result.partido.length;i++)
@@ -30,10 +52,13 @@ $(function(){
         {
             if(result2.permanente==false)
             {
+                contEquipo2.attr("vacio",true);
                 boton = $("<div class='text-center'>\
                 <button type='button' id='btnUnirseTemporal' class='btn btn-success'>Unirse</button>\
                 </div>")
-                boton.on("click",unirseTemporal)
+                boton.on("click",function(){
+                    unirseTemporal()
+                })
                 contPista.append(boton)
             }
             if(result2.permanente==true)
@@ -41,7 +66,9 @@ $(function(){
                 boton = $("<div class='text-center'>\
                 <button type='button' id='btnUnirsePermanente' class='btn btn-success'>Unirse</button>\
                 </div>")
-                boton.on("click",unirsePermanente)
+                boton.on("click",function(){
+                    unirsePermanente()
+                })
                 contPista.append(boton)
             }
             
@@ -89,6 +116,7 @@ $(function(){
 
     function unirsePermanente(){
         $.getJSON("/api/unirsePartidoPerma/"+id,function(result){
+            res = "";
             if(result.clave==true)
             {
                 $("button").remove();
@@ -97,10 +125,7 @@ $(function(){
                 $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
                 rellenaJugador(contEquipo2,result.equipo.jugadores);
                 $("#btnUnirsePermanente").remove();
-                $("#modalHora").find(".modal-body").children().remove();
-                $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
-                $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
-                $("#modalHora").modal("show");
+                
                 boton = $("<div class='text-center'>\
                 <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
                 </div>")
@@ -108,35 +133,94 @@ $(function(){
                     salirPartido()
                 })
                 contPista.append(boton)
+                res = result.respuesta;
             }
+            else{
+                res = result.respuesta;
+            }
+
+            $("#modalHora").find(".modal-body").children().remove();
+            $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+            $("#modalHora").find(".modal-body").append("<p>"+res+"</p>");
+            $("#modalHora").modal("show");
         })
         
     }
 
     function unirseTemporal(){
-        $.getJSON("/api/unirsePartidoTempo/"+id,function(result){
-            console.log(result);
-            if(result.clave==true)
-            {
-                $("button").remove();
-                if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
-                $(contEquipo2.children()[0]).text(result.equipo.nombre);
-                $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
-                rellenaJugador(contEquipo2,result.equipo.jugadores);
-                $("#btnUnirsePermanente").remove();
-                $("#modalHora").find(".modal-body").children().remove();
-                $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
-                $("#modalHora").find(".modal-body").append("<p>"+result.respuesta+"</p>");
-                $("#modalHora").modal("show");
-                boton = $("<div class='text-center'>\
-                <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
-                </div>")
-                boton.on("click",function(){
-                    salirPartido()
-                })
-                contPista.append(boton)
-            }
-        })
+        if(contEquipo2.attr("vacio")=="true")
+        {
+            //crear equipo
+            cuerpo = $("<p class='bg-info text-white'>Al no existir equipo temporal, tendrás que crearlo y te asiganarás automáticamente como capitán</p><div class='card-header'>Escudo del equipo</div>\
+                <div class='card-body text-center'>\
+                    <img class='rounded mb-2' id='imagen' src='' width='250px'>\
+                    <br>\
+                    <div class='row'>\
+                        <div class='col-md-6'>\
+                            <label for='file' class='text-dark rounded p-3' id='archivo'>\
+                                <i class='fas fa-cloud-upload-alt' style='font-size:36px'></i>\
+                            </label>\
+                            <input id='file' type='file' onchange='previewFile();' accept='image/png, image/gif, image/jpeg' name='imagen'/>\
+                        </div>\
+                        <div class='col-md-6'>\
+                        <svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-trash3' viewBox='0 0 16 16' id='eliminarFoto'>\
+                            <path d='M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z'/>\
+                        </svg>\
+                        </div>\
+                    </div>\
+                </div>\
+                <div class='card-header'>Nombre del equipo</div>\
+                <div class='card-body'>\
+                <form id='formulario' class='needs-validation'>\
+                  <div class='mb-3'>\
+                      <input class='form-control' id='inputNombre' name='nombre'>\
+                  </div>\
+                </div>\
+                </div>\
+                <div class='col-xl-12 col-md-12 col-lg-12 my-4'>\
+          <button class='btn btn-danger' type='button' id='botonGuardar'>Guardar cambios</button>\
+        </div>\
+        <div class='col-md-6' id='carga'></div>\
+        </form>");
+            $("#modalHora").find(".modal-body").children().remove();
+            $("#modalHora").find(".modal-body").append("<h2>CREAR EQUIPO</h2>");
+            $("#modalHora").find(".modal-body").append(cuerpo);
+            $("#modalHora").modal("show");
+        }
+        else
+        {
+            //unirnos al equipo que hay
+        }
+        // $.getJSON("/api/unirsePartidoTempo/"+id,function(result){
+        //     console.log(result);
+        //     res = "";
+        //     if(result.clave==true)
+        //     {
+        //         $("button").remove();
+        //         if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
+        //         $(contEquipo2.children()[0]).text(result.equipo.nombre);
+        //         $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
+        //         rellenaJugador(contEquipo2,result.equipo.jugadores);
+        //         $("#btnUnirsePermanente").remove();
+                
+        //         boton = $("<div class='text-center'>\
+        //         <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
+        //         </div>")
+        //         boton.on("click",function(){
+        //             salirPartido()
+        //         })
+        //         contPista.append(boton)
+        //         res = result.respuesta;
+        //     }
+        //     else{
+        //         res = result.respuesta;
+        //     }
+            
+        //     $("#modalHora").find(".modal-body").children().remove();
+        //         $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+        //         $("#modalHora").find(".modal-body").append("<p>"+res+"</p>");
+        //         $("#modalHora").modal("show");
+        // })
     }
 
     function salirPartido(){
@@ -155,14 +239,18 @@ $(function(){
                     boton = $("<div class='text-center'>\
                     <button type='button' id='btnUnirsePermanente' class='btn btn-success'>Unirse</button>\
                     </div>")
-                    boton.on("click",unirsePermanente)
+                    boton.on("click",function(){
+                        unirsePermanente()
+                    })
                     contPista.append(boton)
                 }
                 else{
                     boton = $("<div class='text-center'>\
                     <button type='button' id='btnUnirseTemporal' class='btn btn-success'>Unirse</button>\
                     </div>")
-                    boton.on("click",unirseTemporal)
+                    boton.on("click",function(){
+                        unirseTemporal()
+                    })
                     contPista.append(boton)
                 }
                 $(contEquipo2.children()[0]).text("A la espera");
@@ -201,3 +289,53 @@ $(function(){
         salirPartido()
     })
 })
+function previewFile(input){
+    var file = $("input[type=file]").get(0).files[0];
+    var eliminar = $("#eliminarFoto");
+
+    eliminar.on("click",function(){
+        $('#file')[0].files[0]=null;
+        $("#imagen").attr("src", "http://localhost:8000/images/interrogacion.png").css("width", "128px");
+    })
+
+    if(file){
+        var reader = new FileReader();
+
+        reader.onload = function(){
+            $("#imagen").attr("src", reader.result).css("width", "300px").attr("ruta",reader.result);
+        }
+
+        reader.readAsDataURL(file);
+    }
+}
+
+function guardaEquipo(guardar){
+    guardar.on("click",function(){
+        spinner = $("<div class='loader' id='cargando'></div>");
+        if(validator.errorList.length==0 && $("#inputNombre").attr("value")!="")
+        {
+            $("#carga").append(spinner);
+            var formData = new FormData();
+            var files = $('#file')[0].files[0];
+            formData.append('file',files);
+            formData.append('nombre',nombre.val());
+            $.ajax({
+                url: '/api/creaEquipoTempo',
+                type: 'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(text){
+                    text = JSON.parse(text);
+                    $("#modalHora").modal("hide");
+                    $("div").remove("#cargando");
+                    $("#modalHora").find(".modal-body").children().remove();
+                    $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
+                    $("#modalHora").find(".modal-body").append("<p>"+text+"</p>");
+                    $("#modalHora").modal("show");
+                    if(text=="EL EQUIPO SE HA CREADO CORRECTAMENTE") window.setInterval(window.location.href="/mis/equipos", 4500);
+                }
+            });
+        }
+    })
+}

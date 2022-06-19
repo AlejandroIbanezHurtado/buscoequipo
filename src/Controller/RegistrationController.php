@@ -3,17 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Jugador;
-use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Form\RegistrationFormType;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -28,7 +30,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $user = new Jugador();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -48,13 +50,29 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
+            // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            //     (new TemplatedEmail())
+            //         ->from(new Address('buscoEquipo2022@gmail.com', 'buscoEquipo Bot'))
+            //         ->to($user->getEmail())
+            //         ->subject('Por favor confirma el email')
+            //         ->htmlTemplate('registration/confirmation_email.html.twig')
+            // );
+            $email = (new TemplatedEmail())
                     ->from(new Address('buscoEquipo2022@gmail.com', 'buscoEquipo Bot'))
                     ->to($user->getEmail())
                     ->subject('Por favor confirma el email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+                    ->htmlTemplate('registration/confirmation_email.html.twig');
+            // ->from("buscoequipo2020@gmail.com")
+            // ->to($user->getEmail())
+            // ->subject('BuscoEquipo')
+            // ->htmlTemplate('registration/confirmation_email.html.twig');
+
+        try{
+            $mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+           
+           
+        }
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_login');

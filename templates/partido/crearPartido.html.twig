@@ -1,0 +1,79 @@
+{% extends "base.html.twig "%}
+{% block styles %}
+  <link rel="stylesheet" href="{{ asset('css/lib/spinner.css')}}">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div id="perma" perma={{perma}}></div>
+<div class="px-4 bg-negro">
+    <hr class="mt-0 mb-4">
+    <div class="row d-flex align-items-center">        
+        <div class="col-xl-4 col-md-4 col-lg-4">
+            <!-- Account details card-->
+            <div class="card mb-4">
+            <div class="card-header">Pista en la que se juega</div>
+                <div class="card-body">
+                <form id="formulario" class="needs-validation">
+                  <!-- Form Group (nombre)-->
+                  <div class="mb-3">
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Cargando...</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-4 col-lg-4">
+            <!-- Account details card-->
+            <div class="card mb-4">
+            <div class="card-header">Fecha y hora del partido</div>
+                <div class="card-body">
+                  <!-- Form Group (nombre)-->
+                  <div class="mb-3">
+                    <input type="text" id="datepicker">
+                    <input type="time" id="timepicker">
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-4 col-lg-4">
+            <!-- Account details card-->
+            <div class="card mb-4">
+            <div class="card-header bg-warning">NOTA IMPORTANTE</div>
+                <div class="card-body bg-secondary text-white">
+                    Al crear un partido te asignas automáticamente en él
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-md-12 col-lg-12 my-4">
+          <button class="btn btn-danger" type="button" id="botonGuardar">Guardar cambios</button>
+        </div>
+        <div class="col-md-6" id="carga"></div>
+
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="modalHora" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% if perma == 1 %}
+  <script src="{{ asset('js/lib/lib-crearPartidoPerma.js') }}"></script>
+{% else %}
+  <script src="{{ asset('js/lib/lib-crearPartidoTempo.js') }}"></script>
+{% endif %}
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+{% endblock %}

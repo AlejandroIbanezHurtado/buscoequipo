@@ -185,6 +185,10 @@ $(function(){
         rellenaEquipos(1,3,perma,orden);
         paginacion(1,3,perma,orden);
     })
+
+    $(".btn").on("click",function(){
+        perma==1 ? window.location.href="/crear/partido/permanente" : window.location.href="/crear/partido/temporal";
+    })
         
 })
 

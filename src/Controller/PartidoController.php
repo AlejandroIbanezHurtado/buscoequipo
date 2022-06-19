@@ -40,7 +40,6 @@ class PartidoController extends AbstractController
      */
     public function partidoPermanenteId(ManagerRegistry $doctrine, $id): Response
     {
-        // $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
         return $this->render('partido/unirsePartido.html.twig', [
             'controller_name' => 'PartidoController',
         ]); 
@@ -52,9 +51,32 @@ class PartidoController extends AbstractController
      */
     public function partidoTemporalId(ManagerRegistry $doctrine, $id): Response
     {
-        // $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
         return $this->render('partido/unirsePartido.html.twig', [
             'controller_name' => 'PartidoController',
+        ]); 
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/crear/partido/permanente", name="crearPartidoPermanente")
+     */
+    public function crearPartidoPermanente(ManagerRegistry $doctrine): Response
+    {
+        return $this->render('partido/crearPartido.html.twig', [
+            'controller_name' => 'PartidoController',
+            'perma' => 1
+        ]); 
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/crear/partido/temporal", name="crearPartidoTemporal")
+     */
+    public function crearPartidoTemporal(ManagerRegistry $doctrine): Response
+    {
+        return $this->render('partido/crearPartido.html.twig', [
+            'controller_name' => 'PartidoController',
+            'perma' => 0
         ]); 
     }
 }

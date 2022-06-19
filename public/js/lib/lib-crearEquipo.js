@@ -43,7 +43,7 @@ $(function(){
                     $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
                     $("#modalHora").find(".modal-body").append("<p>"+text+"</p>");
                     $("#modalHora").modal("show");
-                    if(text=="EL EQUIPO SE HA CREADO CORRECTAMENTE") window.setInterval(window.location.href="/mis/equipos", 2500);
+                    if(text=="EL EQUIPO SE HA CREADO CORRECTAMENTE") window.setInterval(window.location.href="/mis/equipos", 4500);
                 }
             });
         }

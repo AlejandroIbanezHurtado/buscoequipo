@@ -218,4 +218,51 @@ class EquiposController extends AbstractController
         }
         return new Response(json_encode($respuesta));
     }
+
+    /**
+     * @Route("/api/creaEquipoTempo", name="creaEquipoTempo")
+     */
+    public function creaEquipoTempo(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
+    {
+        if(empty($_SESSION))
+        {
+            session_start();
+        }
+        $correo = $_SESSION['_sf2_attributes']['_security.last_username'];
+
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryEquipoJugador = $doctrine->getRepository(EquipoJugador::class);
+  
+        $j = $repositoryJugador->findOneBy(array('email' => $correo));
+        $e = new Equipo();
+        $e->setNombre($_POST["nombre"]);
+        $e->setPermanente(true);
+        $e->setCapitan($j);
+
+        if(isset($_FILES['file']))
+        {
+            $nombre = time().rand(1,99999).$_FILES['file']['name'];
+            move_uploaded_file($_FILES["file"]["tmp_name"], "bd/".$nombre);
+            $e->setEscudo($nombre);
+        }
+
+        $ej = new EquipoJugador();
+        $ej->setEquipo($e);
+        $ej->setJugador($j);
+        $errores = $validator->validate($e);
+        if(count($errores)==0)
+        {
+            $repositoryEquipo->add($e,true);
+            $repositoryEquipoJugador->add($ej,true);
+        }
+        $array = [];
+        foreach ($errores as &$valor) {
+            $array[] = $valor->getMessage();
+        }
+        $respuesta=$array;
+        if(count($array)==0) $respuesta="EL EQUIPO SE HA CREADO CORRECTAMENTE";
+        
+        return new Response(json_encode($respuesta));
+    }
 }

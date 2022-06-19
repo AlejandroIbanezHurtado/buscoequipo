@@ -20,7 +20,7 @@ class PartidoEquipo
 
     /**
      * @ORM\ManyToOne(targetEntity=Partido::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $id_partido;
 

@@ -45,10 +45,10 @@ class PistaRepository extends ServiceEntityRepository
         }
     }
 
-    public function obtenPistasIndex($limit = 3)
+    public function obtenPistasIndex($limit = 3, $order="rand()")
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "select * from pista order by rand() limit ${limit}";
+        $sql = "select * from pista order by $order limit ${limit}";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $pistas = $resultSet->fetchAll();
