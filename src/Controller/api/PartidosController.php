@@ -282,58 +282,85 @@ class PartidosController extends AbstractController
     /**
      * @Route("/api/crearPartidoTemporal", name="apicrearPartidoTemporal")
      */
-    public function crearPartidoTemporal(ManagerRegistry $doctrine): Response
+    public function crearPartidoTemporal(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
-    //     $entityManager = $doctrine->getManager();
-    //     if(!isset($_SESSION)) session_start();
-    //     $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
-    //     $obj = new stdClass();
-    //     $formato = 'Y-m-d H:i:s';
-    //     $id_pista = $_POST['pista'];
-    //     $fecha_ini = $_POST['fecha_ini'];
-    //     $fecha_ini = new \DateTime();
-    //     $fecha_ini->setTimestamp((intval($_POST['fecha_ini'])/1000)+7200);
-    //     $fecha_fin = new \DateTime();
-    //     $fecha_fin->setTimestamp((intval($_POST['fecha_fin'])/1000)+10800);
-        
+        $obj = new stdClass();
+        $equipoObj = new stdClass();
+        if(empty($_SESSION))
+        {
+            session_start();
+        }
+        $correo = $_SESSION['_sf2_attributes']['_security.last_username'];
 
-    //     $repositoryPartido = $doctrine->getRepository(Partido::class);
-    //     $repositoryJugador = $doctrine->getRepository(Jugador::class);
-    //     $repositoryEquipo = $doctrine->getRepository(Equipo::class);
-    //     $repositoryPista = $doctrine->getRepository(Pista::class);
-    //     $pista = $repositoryPista->findOneBy(['id' => $id_pista]);
-    //     $j = $repositoryJugador->findOneBy(['email' => $email])->getId();
-    //     $capitan = $repositoryEquipo->findOneBy(['capitan' => $j, 'permanente' => 0]);
-    //     $equipo =$repositoryEquipo->findOneBy(['id' => $capitan->getId()]);
-    //     $ocupado = $repositoryPartido->obtenEquipoEntreFecha($j, $fecha_ini->format('Y-m-d H:i:s'), $fecha_fin->format('Y-m-d H:i:s'),1);
-    //     $respuesta="No puedes";
-    //     $obj->clave=false;
-    //     if(!empty($capitan)) //esta asociado a un equipo como capitan
-    //     {
-    //         if(empty($ocupado)) 
-    //         {
-    //             $p = new Partido();
-    //             $p->setFechaIni($fecha_ini);
-    //             $p->setFechaFin($fecha_fin);
-    //             $p->setPista($pista);
-    //             $entityManager->persist($p);
-    //             $entityManager->flush();
-    //             $pe = new PartidoEquipo();
-    //             $pe->setIdEquipo($equipo);
-    //             $pe->setIdPartido($p);
-    //             $entityManager->persist($pe);
-    //             $entityManager->flush();
-    //             $obj->respuesta = "Tu equipo se unió al partido";
-    //             $obj->clave=true;
-    //         }
-    //         else{
-    //             $obj->respuesta="Tienes un partido a esta hora";
-    //         }
-    //     }
-    //     else{
-    //         $obj->respuesta="Debes de ser el capitán de un equipo para unirte al partido";
-    //     }
-    //     return new Response(json_encode($obj));
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryEquipoJugador = $doctrine->getRepository(EquipoJugador::class);
+        $repositoryPartidoEquipo = $doctrine->getRepository(PartidoEquipo::class);
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+        $repositoryPista = $doctrine->getRepository(Pista::class);
+        $j = $repositoryJugador->findOneBy(['email' => $correo])->getId();
+        $id_pista = $_POST['pista'];
+        $pista = $repositoryPista->findOneBy(['id' => $id_pista]);
+        
+        $fecha_ini = $_POST['fecha_ini'];
+        $fecha_ini = new \DateTime();
+        $fecha_ini->setTimestamp((intval($_POST['fecha_ini'])/1000)+7200);
+        $fecha_fin = new \DateTime();
+        $fecha_fin->setTimestamp((intval($_POST['fecha_fin'])/1000)+10800);
+  
+        $j = $repositoryJugador->findOneBy(array('email' => $correo));
+        $ocupado = $repositoryPartido->obtenEquipoEntreFecha($j->getId(), $fecha_ini->format('Y-m-d H:i:s'), $fecha_fin->format('Y-m-d H:i:s'),1);
+
+        $e = new Equipo();
+        $e->setNombre($_POST["nombre"]);
+        $e->setPermanente(false);
+        $e->setCapitan($j);
+
+        if(isset($_FILES['file']))
+        {
+            $nombre = time().rand(1,99999).$_FILES['file']['name'];
+            move_uploaded_file($_FILES["file"]["tmp_name"], "bd/".$nombre);
+            $e->setEscudo($nombre);
+        }
+        
+        $errores = $validator->validate($e);
+        $ej = new EquipoJugador();
+        $ej->setEquipo($e);
+        $ej->setJugador($j);
+        if(count($errores)==0)
+        {
+            if(empty($ocupado))
+            {
+                $repositoryEquipo->add($e,true);
+                $repositoryEquipoJugador->add($ej,true);
+                $p = new Partido();
+                $p->setFechaIni($fecha_ini);
+                $p->setFechaFin($fecha_fin);
+                $p->setPista($pista);
+                $repositoryPartido->add($p,true);
+                $pe = new PartidoEquipo();
+                $pe->setIdPartido($p);
+                $pe->setIdEquipo($e);
+                $repositoryPartidoEquipo->add($pe,true);
+                $equipoObj->escudo = $e->getEscudo();
+                $equipoObj->nombre = $e->getNombre();
+                $equipoObj->jugadores = $repositoryEquipo->obtenJugadoresPorEquipo($e->getId());
+                $obj->detalle = $equipoObj;
+            }
+            else{
+                $obj->respuesta = "TIENES PARTIDOS EN ESTA FECHA";
+            }
+        }
+        
+        $array = [];
+        foreach ($errores as &$valor) {
+            $array[] = $valor->getMessage();
+        }
+        $respuesta=$array;
+        if(count($array)==0) $respuesta="EL PARTIDO SE HA CREADO CORRECTAMENTE";
+        $obj->respuesta = $respuesta;
+        
+        return new Response(json_encode($obj));
     }
 
 }
