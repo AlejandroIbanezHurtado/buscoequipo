@@ -4,28 +4,11 @@ $(function(){
     var contPista = $("#contPista");
     var arrayid = window.location.href.split("/");
     var id = arrayid[arrayid.length-1];
+    var validator = null;
 
     var guardar = $("#botonGuardar");
     var nombre = $("#inputNombre");
-
-    jQuery.validator.setDefaults({
-        debug: true,
-        success: "¡Correcto!"
-    });
-    var validator = $( "#formulario" ).validate({
-        rules: {
-          nombre: {
-            required: true,
-            rangelength: [4, 25]
-          }
-        },
-        messages: {
-            nombre: {
-                required: "Escribe un nombre",
-                rangelength: "El nombre debe de tener entre 4 y 25 caracteres"
-            }
-        }
-    });
+    
 
     $.getJSON("/api/obtenPartido/"+id,function(result){
         result2 = JSON.parse(JSON.stringify(result));
@@ -177,15 +160,16 @@ $(function(){
                   </div>\
                 </div>\
                 </div>\
-                <div class='col-xl-12 col-md-12 col-lg-12 my-4'>\
-          <button class='btn btn-danger' type='button' id='botonGuardar'>Guardar cambios</button>\
-        </div>\
+                <div class='col-xl-12 col-md-12 col-lg-12 my-4'>");
+          btn = $("<button class='btn btn-success' type='button' id='botonGuardar'>Guardar cambios</button>")
+        cuerpo2 = $("</div>\
         <div class='col-md-6' id='carga'></div>\
         </form>");
             $("#modalHora").find(".modal-body").children().remove();
             $("#modalHora").find(".modal-body").append("<h2>CREAR EQUIPO</h2>");
-            $("#modalHora").find(".modal-body").append(cuerpo);
+            $("#modalHora").find(".modal-body").append(cuerpo).append(btn).append(cuerpo2);
             $("#modalHora").modal("show");
+            guardaEquipo(btn,id);
         }
         else
         {
@@ -309,33 +293,64 @@ function previewFile(input){
     }
 }
 
-function guardaEquipo(guardar){
-    guardar.on("click",function(){
+function guardaEquipo(boton,id){
+    jQuery.validator.setDefaults({
+        debug: true,
+        success: "¡Correcto!"
+    });
+
+    
+    validator = $( "#formulario" ).validate({
+        rules: {
+            nombre: {
+            required: true,
+            rangelength: [4, 25]
+            }
+        },
+        messages: {
+            nombre: {
+                required: "Escribe un nombre",
+                rangelength: "El nombre debe de tener entre 4 y 25 caracteres"
+            }
+        }
+    });
+    
+    boton.on("click",function(){
         spinner = $("<div class='loader' id='cargando'></div>");
-        if(validator.errorList.length==0 && $("#inputNombre").attr("value")!="")
+        if(validator.errorList.length==0 && $("#inputNombre").val()!="")
         {
             $("#carga").append(spinner);
             var formData = new FormData();
             var files = $('#file')[0].files[0];
             formData.append('file',files);
-            formData.append('nombre',nombre.val());
+            formData.append('nombre',$("#inputNombre").val());
             $.ajax({
-                url: '/api/creaEquipoTempo',
+                url: '/api/creaEquipoTempo/'+id,
                 type: 'post',
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function(text){
+                    $("#btnUnirseTemporal").remove();
                     text = JSON.parse(text);
                     $("#modalHora").modal("hide");
                     $("div").remove("#cargando");
+                    $($("#contEquipo2").children()[0]).text(text.detalle.nombre);
+                    $($("#contEquipo2").children()[1]).attr("src","/bd/"+text.detalle.escudo);
+                    elemento = $("<div id_jugador="+text.detalle.jugadores[0].jugador_id+" class='alert alert-info d-flex justify-content-between' role='alert'>\
+                    <span>Capitán - "+text.detalle.jugadores[0].nombre+" "+text.detalle.jugadores[0].apellidos+"</span> <img src='/bd/"+text.detalle.jugadores[0].imagen+"' style='max-width: 50px;'</img>\
+                    </div>");
+                    $("#contEquipo2").append(elemento);
+
                     $("#modalHora").find(".modal-body").children().remove();
                     $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
-                    $("#modalHora").find(".modal-body").append("<p>"+text+"</p>");
+                    $("#modalHora").find(".modal-body").append("<p>"+text.respuesta+"</p>");
                     $("#modalHora").modal("show");
-                    if(text=="EL EQUIPO SE HA CREADO CORRECTAMENTE") window.setInterval(window.location.href="/mis/equipos", 4500);
                 }
             });
+        }
+        else{
+            alert("Introcue un nombre válido");
         }
     })
 }

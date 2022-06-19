@@ -7,6 +7,7 @@ use App\Entity\Equipo;
 use App\Entity\Jugador;
 use App\Entity\Partido;
 use App\Entity\EquipoJugador;
+use App\Entity\PartidoEquipo;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -220,10 +221,12 @@ class EquiposController extends AbstractController
     }
 
     /**
-     * @Route("/api/creaEquipoTempo", name="creaEquipoTempo")
+     * @Route("/api/creaEquipoTempo/{id}", name="creaEquipoTempo")
      */
-    public function creaEquipoTempo(ManagerRegistry $doctrine, ValidatorInterface $validator): Response
+    public function creaEquipoTempo(ManagerRegistry $doctrine, ValidatorInterface $validator, $id=null): Response
     {
+        $obj = new stdClass();
+        $equipoObj = new stdClass();
         if(empty($_SESSION))
         {
             session_start();
@@ -233,11 +236,13 @@ class EquiposController extends AbstractController
         $repositoryJugador = $doctrine->getRepository(Jugador::class);
         $repositoryEquipo = $doctrine->getRepository(Equipo::class);
         $repositoryEquipoJugador = $doctrine->getRepository(EquipoJugador::class);
+        $repositoryPartidoEquipo = $doctrine->getRepository(PartidoEquipo::class);
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
   
         $j = $repositoryJugador->findOneBy(array('email' => $correo));
         $e = new Equipo();
         $e->setNombre($_POST["nombre"]);
-        $e->setPermanente(true);
+        $e->setPermanente(false);
         $e->setCapitan($j);
 
         if(isset($_FILES['file']))
@@ -255,6 +260,15 @@ class EquiposController extends AbstractController
         {
             $repositoryEquipo->add($e,true);
             $repositoryEquipoJugador->add($ej,true);
+            $p = $repositoryPartido->findOneBy(['id' => $id]);
+            $pe = new PartidoEquipo();
+            $pe->setIdPartido($p);
+            $pe->setIdEquipo($e);
+            $repositoryPartidoEquipo->add($pe,true);
+            $equipoObj->escudo = $e->getEscudo();
+            $equipoObj->nombre = $e->getNombre();
+            $equipoObj->jugadores = $repositoryEquipo->obtenJugadoresPorEquipo($e->getId());
+            $obj->detalle = $equipoObj;
         }
         $array = [];
         foreach ($errores as &$valor) {
@@ -262,7 +276,8 @@ class EquiposController extends AbstractController
         }
         $respuesta=$array;
         if(count($array)==0) $respuesta="EL EQUIPO SE HA CREADO CORRECTAMENTE";
+        $obj->respuesta = $respuesta;
         
-        return new Response(json_encode($respuesta));
+        return new Response(json_encode($obj));
     }
 }

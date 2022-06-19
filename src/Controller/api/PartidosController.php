@@ -279,4 +279,61 @@ class PartidosController extends AbstractController
         return new Response(json_encode($obj));
     }
 
+    /**
+     * @Route("/api/crearPartidoTemporal", name="apicrearPartidoTemporal")
+     */
+    public function crearPartidoTemporal(ManagerRegistry $doctrine): Response
+    {
+    //     $entityManager = $doctrine->getManager();
+    //     if(!isset($_SESSION)) session_start();
+    //     $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+    //     $obj = new stdClass();
+    //     $formato = 'Y-m-d H:i:s';
+    //     $id_pista = $_POST['pista'];
+    //     $fecha_ini = $_POST['fecha_ini'];
+    //     $fecha_ini = new \DateTime();
+    //     $fecha_ini->setTimestamp((intval($_POST['fecha_ini'])/1000)+7200);
+    //     $fecha_fin = new \DateTime();
+    //     $fecha_fin->setTimestamp((intval($_POST['fecha_fin'])/1000)+10800);
+        
+
+    //     $repositoryPartido = $doctrine->getRepository(Partido::class);
+    //     $repositoryJugador = $doctrine->getRepository(Jugador::class);
+    //     $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+    //     $repositoryPista = $doctrine->getRepository(Pista::class);
+    //     $pista = $repositoryPista->findOneBy(['id' => $id_pista]);
+    //     $j = $repositoryJugador->findOneBy(['email' => $email])->getId();
+    //     $capitan = $repositoryEquipo->findOneBy(['capitan' => $j, 'permanente' => 0]);
+    //     $equipo =$repositoryEquipo->findOneBy(['id' => $capitan->getId()]);
+    //     $ocupado = $repositoryPartido->obtenEquipoEntreFecha($j, $fecha_ini->format('Y-m-d H:i:s'), $fecha_fin->format('Y-m-d H:i:s'),1);
+    //     $respuesta="No puedes";
+    //     $obj->clave=false;
+    //     if(!empty($capitan)) //esta asociado a un equipo como capitan
+    //     {
+    //         if(empty($ocupado)) 
+    //         {
+    //             $p = new Partido();
+    //             $p->setFechaIni($fecha_ini);
+    //             $p->setFechaFin($fecha_fin);
+    //             $p->setPista($pista);
+    //             $entityManager->persist($p);
+    //             $entityManager->flush();
+    //             $pe = new PartidoEquipo();
+    //             $pe->setIdEquipo($equipo);
+    //             $pe->setIdPartido($p);
+    //             $entityManager->persist($pe);
+    //             $entityManager->flush();
+    //             $obj->respuesta = "Tu equipo se unió al partido";
+    //             $obj->clave=true;
+    //         }
+    //         else{
+    //             $obj->respuesta="Tienes un partido a esta hora";
+    //         }
+    //     }
+    //     else{
+    //         $obj->respuesta="Debes de ser el capitán de un equipo para unirte al partido";
+    //     }
+    //     return new Response(json_encode($obj));
+    }
+
 }
