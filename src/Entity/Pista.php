@@ -39,6 +39,11 @@ class Pista
      */
     private $partidos;
 
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $coordenadas;
+
     public function __construct()
     {
         $this->partidos = new ArrayCollection();
@@ -118,5 +123,17 @@ class Pista
     public function __toString()
     {
         return $this->Nombre;
+    }
+
+    public function getCoordenadas(): ?string
+    {
+        return $this->coordenadas;
+    }
+
+    public function setCoordenadas(string $coordenadas): self
+    {
+        $this->coordenadas = $coordenadas;
+
+        return $this;
     }
 }

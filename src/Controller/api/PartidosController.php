@@ -324,6 +324,13 @@ class PartidosController extends AbstractController
         }
         
         $errores = $validator->validate($e);
+        $array = [];
+        foreach ($errores as &$valor) {
+            $array[] = $valor->getMessage();
+        }
+        $respuesta=$array;
+        if(count($array)==0) $respuesta="EL PARTIDO SE HA CREADO CORRECTAMENTE";
+        $obj->respuesta = $respuesta;
         $ej = new EquipoJugador();
         $ej->setEquipo($e);
         $ej->setJugador($j);
@@ -352,13 +359,8 @@ class PartidosController extends AbstractController
             }
         }
         
-        $array = [];
-        foreach ($errores as &$valor) {
-            $array[] = $valor->getMessage();
-        }
-        $respuesta=$array;
-        if(count($array)==0) $respuesta="EL PARTIDO SE HA CREADO CORRECTAMENTE";
-        $obj->respuesta = $respuesta;
+        
+        
         
         return new Response(json_encode($obj));
     }

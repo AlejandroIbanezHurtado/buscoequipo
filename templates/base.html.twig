@@ -80,11 +80,11 @@
                 </li>
               </ul>
             </li>
-            <li><a href="/torneos"
+            {# <li><a href="/torneos"
             {% if app.request.pathinfo == "/torneos" %}
             style="color:red;"
             {% endif %}
-            >Torneos</a></li>
+            >Torneos</a></li> #}
             <li><a href="/pistas"
             {% if app.request.pathinfo == "/pistas" %}
             style="color:red;"
@@ -115,7 +115,7 @@
                             <div class="dropdown-menu">
                               <button class="dropdown-item" type="button"><a href="/mis/equipos" class="text-dark">Mis equipos</a></button>
                               <button class="dropdown-item" type="button"><a href="/mis/partidos" class="text-dark">Mis partidos</a></button>
-                              <button class="dropdown-item" type="button"><a href="/mis/torneos" class="text-dark">Mis torneos</a></button>
+                              {# <button class="dropdown-item" type="button"><a href="/mis/torneos" class="text-dark">Mis torneos</a></button> #}
                             </div>
                           </div>
                           <button class="dropdown-item" type="button"><a href="/perfil" class="text-dark">Editar perfil</a></button>
