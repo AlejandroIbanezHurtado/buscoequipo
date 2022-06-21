@@ -79,4 +79,16 @@ class PartidoController extends AbstractController
             'perma' => 0
         ]); 
     }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/detallePartido/{id}", name="detallePartido")
+     */
+    public function detallePartido(ManagerRegistry $doctrine, $id): Response
+    {
+        return $this->render('partido/detallePartido.html.twig', [
+            'controller_name' => 'PartidoController',
+            'perma' => 0
+        ]); 
+    }
 }

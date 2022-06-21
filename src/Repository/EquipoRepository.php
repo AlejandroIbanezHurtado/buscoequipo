@@ -85,6 +85,16 @@ class EquipoRepository extends ServiceEntityRepository
         return $equipos;
     }
 
+    public function obtenMisEquipos($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select DISTINCT * from equipo inner join equipo_jugador on equipo.id = equipo_jugador.equipo_id where equipo_jugador.jugador_id = ${id}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $equipos = $resultSet->fetchAll();
+        return $equipos;
+    }
+
     public function obtenEquiposPerma($perma=1)
     {
         $conn = $this->getEntityManager()->getConnection();

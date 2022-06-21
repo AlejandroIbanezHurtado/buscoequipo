@@ -280,4 +280,23 @@ class EquiposController extends AbstractController
         
         return new Response(json_encode($obj));
     }
+
+    /**
+     * @Route("api/obtenMisEquipos", name="obtenMisEquipos")
+     */
+    public function obtenMisEquipos(ManagerRegistry $doctrine): Response
+    {
+        if(empty($_SESSION))
+        {
+            session_start();
+        }
+        $correo = $_SESSION['_sf2_attributes']['_security.last_username'];
+        $obj = new stdClass();
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $j = $repositoryJugador->findOneBy(['email' => $correo]);
+
+        $obj->equipos = $repositoryEquipo->obtenMisEquipos($j->getId());
+        return new Response(json_encode($obj));
+    }
 }

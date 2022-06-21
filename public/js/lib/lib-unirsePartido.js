@@ -171,40 +171,6 @@ $(function(){
             $("#modalHora").modal("show");
             guardaEquipo(btn,id);
         }
-        else
-        {
-            //unirnos al equipo que hay
-        }
-        // $.getJSON("/api/unirsePartidoTempo/"+id,function(result){
-        //     console.log(result);
-        //     res = "";
-        //     if(result.clave==true)
-        //     {
-        //         $("button").remove();
-        //         if(result.equipo.escudo==null) result.equipo.escudo="interrogacion.png";
-        //         $(contEquipo2.children()[0]).text(result.equipo.nombre);
-        //         $(contEquipo2.children()[1]).attr("src","/bd/"+result.equipo.escudo);
-        //         rellenaJugador(contEquipo2,result.equipo.jugadores);
-        //         $("#btnUnirsePermanente").remove();
-                
-        //         boton = $("<div class='text-center'>\
-        //         <button type='button' id='btnSalir' class='btn btn-danger'>SALIR</button>\
-        //         </div>")
-        //         boton.on("click",function(){
-        //             salirPartido()
-        //         })
-        //         contPista.append(boton)
-        //         res = result.respuesta;
-        //     }
-        //     else{
-        //         res = result.respuesta;
-        //     }
-            
-        //     $("#modalHora").find(".modal-body").children().remove();
-        //         $("#modalHora").find(".modal-body").append("<h2>AVISO DEL SISTEMA</h2>");
-        //         $("#modalHora").find(".modal-body").append("<p>"+res+"</p>");
-        //         $("#modalHora").modal("show");
-        // })
     }
 
     function salirPartido(){
@@ -271,6 +237,10 @@ $(function(){
     });
     $("#btnSalir").on("click",function(){
         salirPartido()
+    })
+
+    $.getJSON("/api/saberDetalle/"+id,function(result){
+        if(result.respuesta==true) $("#contDetalle").append($("<a class='text-center' href=/detallePartido/"+id+">Rellenar detalle</a>"));
     })
 })
 function previewFile(input){

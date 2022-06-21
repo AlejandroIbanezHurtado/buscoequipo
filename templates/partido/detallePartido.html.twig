@@ -1,0 +1,52 @@
+{% extends "base.html.twig "%}
+{% block styles %}
+  <link rel="stylesheet" href="{{ asset('css/lib/spinner.css')}}">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div id="perma" perma={{perma}}></div>
+<div class="px-4 bg-negro">
+    <hr class="mt-0 mb-4">
+    <div class="row d-flex align-items-center">        
+        <div class="col-xl-4 col-md-4 col-lg-4">
+            <!-- Account details card-->
+            <button type="button mb-4" id="otro" n="1" class="btn btn-warning">Añadir otro</button>
+            <div class="card mb-4">
+            <div class="card-header">Datos 1</div>
+                <div class="card-body">
+                  <form id="formulario" class="needs-validation">
+                    <!-- Form Group (nombre)-->
+                    <div class="mb-3">
+                      <select class="form-select" aria-label="Default select example" name="jugador1">
+                          <option selected>Cargando...</option>
+                      </select>
+                      <input type="number" name="minuto1" requiredminlength="1" maxlength="2" style="width: 30%">
+                      <select class="form-select" aria-label="Default select example" name="tipo1">
+                          <option selected value="g">gol</option>
+                          <option value="a">amarilla</option>
+                          <option value="r">roja</option>
+                      </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="contCampos"></div>
+<div class="px-4 mb-4 bg-negro">
+    <div class="row d-flex align-items-center">        
+        <div class="col-xl-4 col-md-4 col-lg-4">
+          <button type="button mb-4" id="guardar" class="btn btn-success">Guardar</button>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ asset('js/lib/lib-crearDetalle.js') }}"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+{% endblock %}

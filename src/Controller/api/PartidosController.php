@@ -36,6 +36,23 @@ class PartidosController extends AbstractController
     }
 
     /**
+     * @Route("/api/obtenMisPartidos/{pagina}/{filas}/{perma}/{order}", name="obtenMisPartidos")
+     */
+    public function obtenMisPartidos(ManagerRegistry $doctrine, int $pagina=1, int $filas=6, int $perma=1, string $order="desc"): Response
+    {
+        $obj = new stdClass();
+        if(!isset($_SESSION)) session_start();
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $j = $repositoryJugador->findOneBy(['email' => $email])->getId();
+        $todo = $repositoryPartido->obtenMisPartidos($j);
+        $obj->partidos = $todo->registros;
+
+        return new Response(json_encode($obj));
+    }
+
+    /**
      * @Route("/api/obtenPartido/{id}", name="obtenPartido")
      */
     public function obtenPartido(ManagerRegistry $doctrine, $id): Response
@@ -362,6 +379,48 @@ class PartidosController extends AbstractController
         
         
         
+        return new Response(json_encode($obj));
+    }
+
+    /**
+     * @Route("/api/saberDetalle/{id}", name="saberDetalle")
+     */
+    public function saberDetalle(ManagerRegistry $doctrine, $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+        if(!isset($_SESSION)) session_start();
+        $email = $_SESSION["_sf2_attributes"]["_security.last_username"];
+        $obj = new stdClass();
+        $equipoObj = new stdClass();
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+        $repositoryJugador = $doctrine->getRepository(Jugador::class);
+        $repositoryEquipo = $doctrine->getRepository(Equipo::class);
+
+        $j = $repositoryJugador->findOneBy(['email' => $email])->getId();
+        $capitan = $repositoryPartido->obtenMostrarDetalle($id, $j);
+        $respuesta="No puedes";
+        $obj->clave=false;
+        if(!empty($capitan)) //esta asociado a un equipo como capitan
+        {
+            $obj->respuesta=true;
+        }
+        else{
+            $obj->respuesta=false;
+        }
+
+        return new Response(json_encode($obj));
+    }
+
+    /**
+     * @Route("/api/obtenJugadoresPorPartido/{id}", name="obtenJugadoresPorPartido")
+     */
+    public function obtenJugadoresPorPartido(ManagerRegistry $doctrine, $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $obj = new stdClass();
+        $repositoryPartido = $doctrine->getRepository(Partido::class);
+        $obj->jugadores = $repositoryPartido->obtenJugadoresPorPartido($id);
+
         return new Response(json_encode($obj));
     }
 

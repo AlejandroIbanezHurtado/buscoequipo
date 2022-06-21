@@ -151,6 +151,26 @@ class PartidoRepository extends ServiceEntityRepository
         return $partido;
     }
 
+    public function obtenMostrarDetalle($id_partido, $id_jugador)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from equipo_jugador inner join equipo on equipo_jugador.jugador_id = equipo.capitan_id inner join partido_equipo on equipo.id = partido_equipo.id_equipo_id inner join partido on partido.id = partido_equipo.id_partido_id where partido_equipo.id_partido_id=${id_partido} and equipo_jugador.jugador_id=${id_jugador} and partido.fecha_ini>NOW() and NOT EXISTS (select * from detalle_partido where detalle_partido.partido_id = ${id_partido})";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partido = $resultSet->fetchAll();
+        return $partido;
+    }
+
+    public function obtenJugadoresPorPartido($id_partido)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "select * from jugador inner join equipo_jugador on jugador.id = equipo_jugador.jugador_id inner join partido_equipo on equipo_jugador.equipo_id = partido_equipo.id_equipo_id where partido_equipo.id_partido_id = ${id_partido}";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $partido = $resultSet->fetchAll();
+        return $partido;
+    }
+
     public function obtenPartidosPaginados(int $pagina=1, int $filas=5, int $perma=1, string $order="asc")
     {
         $obj = new stdClass();
@@ -189,6 +209,20 @@ class PartidoRepository extends ServiceEntityRepository
             $resultSet = $stmt->executeQuery();
             $registros = $resultSet->fetchAll(); 
         }
+        $obj->registros=$registros;
+        return $obj;
+    }
+
+    public function obtenMisPartidos($id_jugador)
+    {
+        $obj = new stdClass();
+        $conn = $this->getEntityManager()->getConnection();
+
+        $registros = array();
+        $sql = "select distinct id_partido_id as partido_id, id_equipo_id as equipo_id, equipo.nombre, equipo.escudo, goles, (select fecha_ini from partido where partido.id = id_partido_id) as fecha from equipo inner join partido_equipo on partido_equipo.id_equipo_id=equipo.id inner join equipo_jugador on equipo_jugador.equipo_id = equipo.id left join (select P.partido_id, P.equipo_id, P.nombre, P.escudo, count(*) as 'goles' from (select detalle_partido.partido_id, detalle_partido.equipo_id, equipo.nombre, equipo.escudo, Par.fecha_ini, detalle_partido.gol from detalle_partido inner join equipo on detalle_partido.equipo_id = equipo.id inner join (select * from partido order by fecha_ini desc) as Par on detalle_partido.partido_id = Par.id where gol=1) as P group by P.partido_id, P.equipo_id order by P.partido_id) as h on h.partido_id = partido_equipo.id_partido_id and h.equipo_id=partido_equipo.id_equipo_id where equipo_jugador.jugador_id = ${id_jugador} order by partido_equipo.id_partido_id";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $registros = $resultSet->fetchAll();
         $obj->registros=$registros;
         return $obj;
     }

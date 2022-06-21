@@ -28,7 +28,7 @@ class MisController extends AbstractController
      */
     public function misPartidos(): Response
     {
-        return $this->render('mis/equipos.html.twig', [
+        return $this->render('mis/partidos.html.twig', [
             'controller_name' => 'PrincipalController',
         ]);
     }
